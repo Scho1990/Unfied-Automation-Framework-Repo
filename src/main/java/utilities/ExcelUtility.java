@@ -32,7 +32,7 @@ public class ExcelUtility implements AutoCloseable {
                 workbook = new XSSFWorkbook();
             }
         } catch (IOException e) {
-            throw new ExcelOperationException("Unable to open excel file: " + filepath, e);
+            throw new ExcelOperationException("Unable to open excel file: '%s' " + filepath, e);
         }
     }
 
@@ -229,7 +229,7 @@ public class ExcelUtility implements AutoCloseable {
                 return cell.getColumnIndex();
             }
         }
-        throw new RuntimeException(
+        throw new ExcelOperationException(
                 "Column '" + columnName + "' not found in sheet : " + sheetName);
     }
 
