@@ -3,6 +3,7 @@ target/
 
 # TestNG
 test-output/
+reports/
 
 # Logs
 logs/

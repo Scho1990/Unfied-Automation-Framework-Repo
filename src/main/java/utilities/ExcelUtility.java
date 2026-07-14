@@ -1,5 +1,6 @@
 package utilities;
 
+import exceptions.ExcelOperationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
@@ -31,7 +32,7 @@ public class ExcelUtility implements AutoCloseable {
                 workbook = new XSSFWorkbook();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Unable to open excel file: " + filepath, e);
+            throw new ExcelOperationException("Unable to open excel file: " + filepath, e);
         }
     }
 
@@ -48,7 +49,7 @@ public class ExcelUtility implements AutoCloseable {
     public Sheet getSheet(String sheetName) {
         Sheet sheet = workbook.getSheet(sheetName);
         if (sheet == null) {
-            throw new RuntimeException("Sheet " + sheetName + " not found");
+            throw new ExcelOperationException("Sheet " + sheetName + " not found");
         }
         return sheet;
     }
@@ -58,7 +59,7 @@ public class ExcelUtility implements AutoCloseable {
         try (FileOutputStream fileOutputStream = new FileOutputStream(filepath)) {
             workbook.write(fileOutputStream);
         } catch (IOException e) {
-            throw new RuntimeException("Unable to save excel file: " + filepath, e);
+            throw new ExcelOperationException("Unable to save excel file: " + filepath, e);
         }
     }
 
@@ -177,9 +178,7 @@ public class ExcelUtility implements AutoCloseable {
     public boolean compareColumns(String expectedSheet,int expectedColumn,String actualSheet,int actualColumn) {
         List<String> expected = readColumn(expectedSheet,expectedColumn);
         List<String> actual = readColumn(actualSheet,actualColumn);
-        /*logger.info("Comparing ExpectedStations with ActualStations");
-        logger.info("Expected Sheet Name {} values : {} Total Values : {} ", expectedSheet, expected,expected.size());
-        logger.info("Actual Sheet Name {} values : {} Total Values : {} ", actualSheet, actual,actual.size());*/
+
         if (expected.size() != actual.size()) {
             return false;
         }

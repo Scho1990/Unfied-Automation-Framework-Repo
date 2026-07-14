@@ -1,5 +1,7 @@
 package config;
 
+import exceptions.ConfigurationException;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -13,7 +15,7 @@ public final class ConfigReader {
         try(FileInputStream fileInputStream = new FileInputStream(ConfigurationManager.getConfigFilePath())){
             prop.load(fileInputStream);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load configuration file: "+ ConfigurationManager.getConfigFilePath(),e);
+            throw new ConfigurationException("Failed to load configuration file: "+ ConfigurationManager.getConfigFilePath(),e);
         }
     }
 
@@ -21,7 +23,7 @@ public final class ConfigReader {
     public static String getProperty(String key) {
         String value = prop.getProperty(key);
         if (value == null || value.trim().isEmpty()) {
-            throw new RuntimeException("Property: " + key+" is not found in configuration file");
+            throw new ConfigurationException("Property '%s' is missing in the configuration.".formatted(key));
         }
         return value;
     }

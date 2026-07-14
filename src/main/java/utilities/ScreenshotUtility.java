@@ -3,6 +3,7 @@ package utilities;
 import config.ConfigReader;
 import core.FrameworkPaths;
 import driver.DriverManager;
+import exceptions.ScreenshotException;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -20,7 +21,6 @@ public final class ScreenshotUtility {
      */
     public static String captureScreenshot(String testName) {
         String screenshotDirectory = FrameworkPaths.getScreenshotDirectory().toString();
-       // createDirectory(screenshotDirectory);
         String timeStamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS"));
         long threadId = Thread.currentThread().threadId();
@@ -31,20 +31,9 @@ public final class ScreenshotUtility {
         try {
             FileUtils.copyFile(sourceFile, destinationFile);
         } catch (IOException e) {
-            throw new RuntimeException(
+            throw new ScreenshotException(
                     "Unable to capture screenshot.", e);
         }
         return "screenshots/" + fileName;
     }
-
-    /**
-     * Create screenshot directory if it doesn't exist.
-     */
-   /* private static void createDirectory(String directoryPath) {
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-    }*/
 }

@@ -2,6 +2,7 @@ package driver;
 
 import config.ConfigReader;
 import enums.BrowserType;
+import exceptions.DriverInitializationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +36,7 @@ public final class DriverFactory {
                 break;
 
                 default:
-                    throw new IllegalArgumentException("Unsupported browser: " + browserType);
+                    throw new DriverInitializationException("Unsupported browser: " + browserType);
         }
 
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(
