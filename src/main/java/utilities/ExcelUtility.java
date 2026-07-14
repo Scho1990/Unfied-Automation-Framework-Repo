@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExcelUtility implements AutoCloseable {
-    private final Logger logger = LogManager.getLogger(ExcelUtility.class);
+public final class ExcelUtility implements AutoCloseable {
+    private static final Logger logger = LogManager.getLogger(ExcelUtility.class);
     private final String filepath;
     private Workbook workbook;
 
@@ -32,7 +32,7 @@ public class ExcelUtility implements AutoCloseable {
                 workbook = new XSSFWorkbook();
             }
         } catch (IOException e) {
-            throw new ExcelOperationException("Unable to open excel file: '%s' " + filepath, e);
+            throw new ExcelOperationException("Unable to open excel file: '%s'. ".formatted(filepath), e);
         }
     }
 
@@ -49,7 +49,7 @@ public class ExcelUtility implements AutoCloseable {
     public Sheet getSheet(String sheetName) {
         Sheet sheet = workbook.getSheet(sheetName);
         if (sheet == null) {
-            throw new ExcelOperationException("Sheet " + sheetName + " not found");
+            throw new ExcelOperationException("Sheet '%s' not found.".formatted(sheetName));
         }
         return sheet;
     }
@@ -59,7 +59,7 @@ public class ExcelUtility implements AutoCloseable {
         try (FileOutputStream fileOutputStream = new FileOutputStream(filepath)) {
             workbook.write(fileOutputStream);
         } catch (IOException e) {
-            throw new ExcelOperationException("Unable to save excel file: " + filepath, e);
+            throw new ExcelOperationException("Unable to save excel file: '%s'.".formatted(filepath), e);
         }
     }
 
@@ -219,7 +219,7 @@ public class ExcelUtility implements AutoCloseable {
         Sheet sheet = getSheet(sheetName);
         Row headerRow = sheet.getRow(0);
         if (headerRow == null) {
-            throw new RuntimeException("Header row not found in sheet : " + sheetName);
+            throw new ExcelOperationException("Header row not found in sheet '%s'.".formatted(sheetName));
         }
         DataFormatter formatter = new DataFormatter();
         for (Cell cell : headerRow) {

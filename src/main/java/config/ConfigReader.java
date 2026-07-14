@@ -15,7 +15,7 @@ public final class ConfigReader {
         try(FileInputStream fileInputStream = new FileInputStream(ConfigurationManager.getConfigFilePath())){
             prop.load(fileInputStream);
         } catch (IOException e) {
-            throw new ConfigurationException("Failed to load configuration file: "+ ConfigurationManager.getConfigFilePath(),e);
+            throw new ConfigurationException("Failed to load configuration file: %s".formatted(ConfigurationManager.getConfigFilePath()),e);
         }
     }
 

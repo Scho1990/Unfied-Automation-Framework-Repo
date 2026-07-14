@@ -36,7 +36,7 @@ public final class DriverFactory {
                 break;
 
                 default:
-                    throw new DriverInitializationException("Unsupported browser: " + browserType);
+                    throw new DriverInitializationException("Unsupported browser type: %s".formatted(browserType));
         }
 
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(

@@ -1,6 +1,5 @@
 package utilities;
 
-import config.ConfigReader;
 import core.FrameworkPaths;
 import driver.DriverManager;
 import exceptions.ScreenshotException;
