@@ -2,7 +2,7 @@ package listeners;
 
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import framework.DirectoryManager;
+import core.DirectoryManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestContext;
@@ -20,7 +20,7 @@ public class TestListener implements ITestListener {
         logger.info("========================================");
         logger.info("Execution Started : {}", context.getName());
         logger.info("========================================");
-        DirectoryManager.initializeFrameworkDirectories();
+        DirectoryManager.initializeCoreDirectories();
         ExtentManager.getExtentReports();
     }
 

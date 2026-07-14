@@ -1,4 +1,4 @@
-package framework;
+package core;
 
 public class FrameworkInfo {
 }

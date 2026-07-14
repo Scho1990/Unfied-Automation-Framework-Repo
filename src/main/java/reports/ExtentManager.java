@@ -2,7 +2,7 @@ package reports;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import framework.FrameworkPaths;
+import core.FrameworkPaths;
 
 public final class ExtentManager {
 
@@ -13,7 +13,7 @@ public final class ExtentManager {
         if (extentReports == null) {
             synchronized (ExtentManager.class) {
                 if (extentReports == null) {
-                    ExtentSparkReporter sparkReporter = new ExtentSparkReporter(FrameworkPaths.getReportPath());
+                    ExtentSparkReporter sparkReporter = new ExtentSparkReporter(FrameworkPaths.getReportPath().toString());
                     sparkReporter.config().setDocumentTitle("Execution Report");
                     sparkReporter.config().setReportName("QA Assignment Report");
 

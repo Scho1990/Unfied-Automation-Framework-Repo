@@ -1,6 +1,5 @@
-package framework;
+package core;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +8,7 @@ import java.nio.file.Paths;
 public final class DirectoryManager {
     private DirectoryManager() {}
 
-    public static void initializeFrameworkDirectories()
+    public static void initializeCoreDirectories()
     {
         createDirectories(FrameworkPaths.getExecutionDirectory());
         createDirectories(FrameworkPaths.getScreenshotDirectory());
@@ -17,12 +16,11 @@ public final class DirectoryManager {
         createDirectories(FrameworkPaths.getDownloadDirectory());
     }
 
-    private static void createDirectories(String directory)
+    private static void createDirectories(Path directory)
     {
-       Path path = Paths.get(directory);
        try
        {
-           Files.createDirectories(path);
+           Files.createDirectories(directory);
        } catch (IOException e) {
            throw new RuntimeException(
                    "Unable to create framework directory : " + directory, e);

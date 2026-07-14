@@ -1,6 +1,6 @@
 package utilities;
 
-import framework.FrameworkPaths;
+import core.FrameworkPaths;
 import driver.DriverManager;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
