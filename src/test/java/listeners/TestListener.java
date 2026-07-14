@@ -20,6 +20,7 @@ public class TestListener implements ITestListener {
         logger.info("========================================");
         logger.info("Execution Started : {}", context.getName());
         logger.info("========================================");
+        DirectoryManager.initializeExecutionDirectories();
         ExtentManager.getExtentReports();
     }
 
