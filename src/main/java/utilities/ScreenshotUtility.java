@@ -1,5 +1,6 @@
 package utilities;
 
+import config.ConfigReader;
 import core.FrameworkPaths;
 import driver.DriverManager;
 import org.apache.commons.io.FileUtils;
@@ -18,8 +19,8 @@ public final class ScreenshotUtility {
      * Capture screenshot and return file Name.
      */
     public static String captureScreenshot(String testName) {
-        String screenshotDirectory = FrameworkPaths.getScreenshotDirectory();
-        createDirectory(screenshotDirectory);
+        String screenshotDirectory = FrameworkPaths.getScreenshotDirectory().toString();
+       // createDirectory(screenshotDirectory);
         String timeStamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS"));
         long threadId = Thread.currentThread().threadId();
@@ -39,11 +40,11 @@ public final class ScreenshotUtility {
     /**
      * Create screenshot directory if it doesn't exist.
      */
-    private static void createDirectory(String directoryPath) {
+   /* private static void createDirectory(String directoryPath) {
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-    }
+    }*/
 }

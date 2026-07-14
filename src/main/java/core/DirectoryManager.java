@@ -3,20 +3,19 @@ package core;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public final class DirectoryManager {
     private DirectoryManager() {}
 
-    public static void initializeCoreDirectories()
+    public static void initializeExecutionDirectories()
     {
-        createDirectories(FrameworkPaths.getExecutionDirectory());
-        createDirectories(FrameworkPaths.getScreenshotDirectory());
-        createDirectories(FrameworkPaths.getLogDirectory());
-        createDirectories(FrameworkPaths.getDownloadDirectory());
+        createDirectory(FrameworkPaths.getExecutionDirectory());
+        createDirectory(FrameworkPaths.getScreenshotDirectory());
+        createDirectory(FrameworkPaths.getLogDirectory());
+        createDirectory(FrameworkPaths.getDownloadDirectory());
     }
 
-    private static void createDirectories(Path directory)
+    private static void createDirectory(Path directory)
     {
        try
        {

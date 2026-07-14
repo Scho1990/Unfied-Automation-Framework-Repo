@@ -1,10 +1,7 @@
 package core;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public final class FrameworkPaths {
 
@@ -18,35 +15,31 @@ public final class FrameworkPaths {
         return PROJECT_ROOT;
     }
 
-    public static Path getResourceDirectory() {
+    public static Path getResourcesDirectory() {
         return PROJECT_ROOT.resolve("src").resolve("main").resolve("resources");
     }
     public static Path getConfigDirectory() {
-        return getResourceDirectory().resolve("config");
+        return getResourcesDirectory().resolve("config");
     }
 
     public static Path getDataDirectory() {
-        return getResourceDirectory().resolve("data");
+        return getResourcesDirectory().resolve("data");
     }
 
-    public static Path getExecutionRoot() {
+    public static Path getExecutionDirectory() {
         return PROJECT_ROOT.resolve("reports").resolve(ExecutionContext.getExecutionId());
     }
 
-    public static Path getReportPath() {
-        return getExecutionRoot().resolve("ExtentReport.html");
-    }
-
     public static Path getScreenshotDirectory() {
-        return getExecutionRoot().resolve("screenshots");
+        return getExecutionDirectory().resolve("screenshots");
     }
 
     public static Path getLogDirectory() {
-        return getExecutionRoot().resolve("logs");
+        return getExecutionDirectory().resolve("logs");
     }
 
     public static Path getDownloadDirectory() {
-        return getExecutionRoot().resolve("downloads");
+        return getExecutionDirectory().resolve("downloads");
     }
 
 }

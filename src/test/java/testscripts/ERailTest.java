@@ -2,6 +2,8 @@ package testscripts;
 
 import base.BaseTest;
 import config.ConfigReader;
+import core.DirectoryManager;
+import core.FrameworkPaths;
 import driver.DriverFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
