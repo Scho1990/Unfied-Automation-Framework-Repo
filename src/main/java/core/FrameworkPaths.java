@@ -1,10 +1,13 @@
 package core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public final class FrameworkPaths {
-
+public static Logger logger = LogManager.getLogger(FrameworkPaths.class);
     private FrameworkPaths() {
 
     }

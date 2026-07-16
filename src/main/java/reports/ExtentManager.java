@@ -41,11 +41,14 @@ public final class ExtentManager {
 
     // Extent Reports System Information
     private static void addSystemInformation(){
-        extentReports.setSystemInfo("Framework", "Unified Automation Framework v2.0");
-        extentReports.setSystemInfo("Environment", System.getProperty("env","QA"));
-        extentReports.setSystemInfo("Browser", System.getProperty("browser","Chrome"));
-        extentReports.setSystemInfo("Java Version", System.getProperty("java.version"));
-        extentReports.setSystemInfo("OS", System.getProperty("os.name"));
+        extentReports.setSystemInfo("Framework", "Unified Automation Framework "+ExecutionContext.getFrameworkVersion());
+        extentReports.setSystemInfo("Framework Version", ExecutionContext.getFrameworkVersion());
+        extentReports.setSystemInfo("Username", ExecutionContext.getUserName());
+        extentReports.setSystemInfo("Environment", ExecutionContext.getEnvironment());
+        extentReports.setSystemInfo("Browser", ExecutionContext.getBrowser().toString());
+        extentReports.setSystemInfo("Java Version", ExecutionContext.getJavaVersion());
+        extentReports.setSystemInfo("OS", ExecutionContext.getOsName());
+        extentReports.setSystemInfo("OS Version", ExecutionContext.getOsVersion());
         extentReports.setSystemInfo("Execution Id", ExecutionContext.getExecutionId());
     }
 }
