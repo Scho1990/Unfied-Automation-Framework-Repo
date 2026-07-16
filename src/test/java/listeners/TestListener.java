@@ -2,6 +2,7 @@ package listeners;
 
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import lifecycle.ExecutionSummary;
 import lifecycle.FrameworkBootstrap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +13,8 @@ import reports.ExtentLogger;
 import reports.ExtentManager;
 import reports.ExtentTestManager;
 import utilities.ScreenshotUtility;
+
+import java.time.Instant;
 
 public class TestListener implements ITestListener {
     private static final Logger logger = LogManager.getLogger(TestListener.class);
@@ -55,6 +58,12 @@ public class TestListener implements ITestListener {
     }
     @Override
     public void onFinish(ITestContext context){
+        int passed = context.getPassedTests().size();
+        int failed = context.getFailedTests().size();
+        int skipped = context.getSkippedTests().size();
+
+        ExecutionSummary.logExecutionSummary(context.getSuite().getName(), passed, failed, skipped, Instant.now());
+
         ExtentManager.getExtentReports().flush();
         ExtentTestManager.unload();
         logger.info("Execution Finished");
