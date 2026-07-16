@@ -25,9 +25,8 @@ public final class FrameworkBootstrap {
         // Create execution directories
         DirectoryManager.initializeExecutionDirectories();
 
-        // Phase-2
-        // ConfigurationValidator.validate();
-
+        // Validate each required keys inside the config.properties file
+        ConfigurationValidator.validate();
         // Initialize reporting
         ExtentManager.getExtentReports();
         logger.info("UAF Framework initialized successfully.");

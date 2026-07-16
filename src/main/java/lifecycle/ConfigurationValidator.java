@@ -24,7 +24,7 @@ public final class ConfigurationValidator {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    private static void validate(){
+    public static void validate(){
         logger.info("Validating framework configuration...");
         validateRequiredProperties();
         validateBrowser();
@@ -37,27 +37,27 @@ public final class ConfigurationValidator {
         for(String requiredProperty : REQUIRED_PROPERTIES){
             String value  = ConfigReader.getProperty(requiredProperty);
             if(value == null || value.isBlank()){
-                logger.info("Required property {} not found.",requiredProperty);
-                throw new ConfigurationException("Required property '%s' not found.".formatted(requiredProperty));
+                logger.error("Required property {} not found.",requiredProperty);
+                throw new ConfigurationException("Required configuration property '%s' is missing or empty.".formatted(requiredProperty));
             }
         }
     }
 
     private static void validateBrowser(){
         logger.info("validating browser...");
-        String browser = ConfigReader.getProperty("browser");
+        String browser = ConfigReader.getPropertyOrSystem("browser");
         try {
             BrowserType.valueOf(browser.toUpperCase());
         }
         catch (IllegalArgumentException e){
-            logger.info("Browser {} not found.",browser);
-            throw new ConfigurationException("Browser '%s' not found.".formatted(browser));
+            logger.error("Browser {} not found.",browser);
+            throw new ConfigurationException("Unsupported browser '%s'. Supported browsers are : %s."
+                    .formatted(browser,java.util.Arrays.toString(BrowserType.values())));
         }
     }
 
     private static void validateTimeouts(){
         logger.info("validating timeouts...");
-        validatePositiveNumber("implicit.wait");
         validatePositiveNumber("explicit.wait");
         validatePositiveNumber("page.load.timeout");
     }
@@ -65,6 +65,7 @@ public final class ConfigurationValidator {
     private static void validatePositiveNumber(String property) {
         int value = ConfigReader.getIntProperty(property);
         if (value <= 0) {
+            logger.error("Property '{}' must be greater than zero.",property);
             throw new ConfigurationException("'%s' must be greater than zero.".formatted(property));
         }
     }
