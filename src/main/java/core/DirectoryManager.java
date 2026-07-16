@@ -1,5 +1,7 @@
 package core;
 
+import exceptions.FrameworkException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,8 +23,8 @@ public final class DirectoryManager {
        {
            Files.createDirectories(directory);
        } catch (IOException e) {
-           throw new RuntimeException(
-                   "Unable to create framework directory : " + directory, e);
+           throw new FrameworkException(
+                   "Unable to create framework directory : %s' ".formatted(directory), e);
        }
     }
 }

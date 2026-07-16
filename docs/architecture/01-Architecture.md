@@ -46,28 +46,7 @@ UAF is built on the following engineering principles:
 
 # 4. High-Level Architecture
 
-                           Test Scripts
-                                │
-                                ▼
-                          TestNG Framework
-                                │
-                                ▼
-                            BaseTest
-                                │
-         ┌──────────────────────┴──────────────────────┐
-         ▼                                             ▼
-DriverFactory                                 Page Objects
-│                                             │
-▼                                             ▼
-DriverManager                                  BasePage
-│                                             │
-▼                                             ▼
-Selenium WebDriver                         Utilities / Reports
-│
-▼
-Browser
-
-![img_3.png](img_3.png)
+![img_3.png](../images/img_3.png)
 
 ---
 
@@ -139,15 +118,7 @@ The Selenium layer remains hidden from the test layer through Page Objects and B
 
 The framework infrastructure is responsible for execution metadata and centralized path management.
 
-ExecutionContext
-│
-▼
-FrameworkPaths
-│
-▼
-DirectoryManager
-
-![img_2.png](img_2.png)
+![img_2.png](../images/img_2.png)
 
 ## ExecutionContext
 
@@ -180,15 +151,7 @@ Responsible for creating required execution directories before framework executi
 
 # 7. Driver Architecture
 
-DriverFactory
-│
-▼
-DriverManager
-│
-▼
-ThreadLocal<WebDriver>
-
-![img_1.png](img_1.png)
+![img_1.png](../images/img_1.png)
 
 ## DriverFactory
 
@@ -217,15 +180,7 @@ This enables parallel execution without thread interference.
 
 # 8. Reporting Architecture
 
-ExtentManager
-│
-▼
-ExtentLogger
-│
-▼
-ExtentTestManager
-
-![img.png](img.png)
+![img.png](../images/img.png)
 
 Responsibilities
 
@@ -240,19 +195,7 @@ Report generation is completely independent from environment configuration.
 
 # 9. Exception Architecture
 
-RuntimeException
-│
-▼
-FrameworkException
-│
-├── ConfigurationException
-├── DriverInitializationException
-├── DataProviderException
-├── ExcelOperationException
-├── ScreenshotException
-└── ReportException
-
-![img_4.png](img_4.png)
+![img_4.png](../images/img_4.png)
 
 Each framework layer throws its own exception, making failures easier to understand and debug.
 
