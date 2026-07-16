@@ -2,7 +2,7 @@ package listeners;
 
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import core.DirectoryManager;
+import lifecycle.FrameworkBootstrap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestContext;
@@ -17,11 +17,8 @@ public class TestListener implements ITestListener {
     private static final Logger logger = LogManager.getLogger(TestListener.class);
     @Override
     public void onStart(ITestContext context){
-        logger.info("========================================");
-        logger.info("Execution Started : {}", context.getName());
-        logger.info("========================================");
-        DirectoryManager.initializeExecutionDirectories();
-        ExtentManager.getExtentReports();
+        logger.info("Starting Test Execution : {}", context.getName());
+        FrameworkBootstrap.initialize();
     }
 
     @Override
