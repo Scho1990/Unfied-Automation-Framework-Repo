@@ -23,7 +23,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result){
-        String testName = result.getTestClass().getRealClass().getSimpleName()+" :: "+result.getMethod().getMethodName();
+        String testName = getTestName(result);
         logger.info("STARTED : {}", testName);
         ExtentTestManager.setTest(ExtentManager.getExtentReports().createTest(testName));
         ExtentLogger.info("Test started");
@@ -59,6 +59,10 @@ public class TestListener implements ITestListener {
         ExtentTestManager.unload();
         logger.info("Execution Finished");
         logger.info("========================================");
+    }
+
+    private String getTestName(ITestResult result){
+        return result.getTestClass().getRealClass().getSimpleName()+" :: "+result.getMethod().getMethodName();
     }
 
 
