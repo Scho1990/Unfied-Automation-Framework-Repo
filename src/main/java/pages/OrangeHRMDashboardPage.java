@@ -1,6 +1,7 @@
 package pages;
 
 import base.BasePage;
+import exceptions.FrameworkException;
 import org.openqa.selenium.By;
 import reports.ExtentLogger;
 
@@ -21,7 +22,7 @@ public class OrangeHRMDashboardPage extends BasePage {
     public OrangeHRMDashboardPage waitForDashboardToLoad() {
         ExtentLogger.info("Verifying Dashboard");
         if(!isDisplayed(LBL_DASHBOARD)){
-            throw  new RuntimeException("Dashboard page is not displayed");
+            throw new FrameworkException("Dashboard page is not displayed");
         }
         return this;
     }

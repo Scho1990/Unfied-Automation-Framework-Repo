@@ -3,7 +3,6 @@ package testscripts;
 import base.BaseTest;
 import dataprovider.LoginDataProvider;
 import org.testng.Assert;
-import org.testng.SkipException;
 import org.testng.annotations.Test;
 import pages.OrangeHRMDashboardPage;
 import pages.OrangeHRMLoginPage;

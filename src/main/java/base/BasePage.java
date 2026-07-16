@@ -4,6 +4,7 @@ import driver.DriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -12,13 +13,18 @@ import utilities.WaitUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public abstract class BasePage {
     private final Logger logger = LogManager.getLogger(getClass());
 
+    protected WebDriver getDriver() {
+        return DriverManager.getDriver();
+    }
+
     private Actions getActions() {
-        return new Actions(DriverManager.getDriver());
+        return new Actions(getDriver());
     }
 
     private Select getSelect(By locator) {
@@ -72,7 +78,7 @@ public abstract class BasePage {
     protected boolean isDisplayed(By locator) {
         try {
             return getVisibleElement(locator).isDisplayed();
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
@@ -127,23 +133,23 @@ public abstract class BasePage {
     }
 
     protected String getPageTitle() {
-        return DriverManager.getDriver().getTitle();
+        return getDriver().getTitle();
     }
 
     protected String getCurrentUrl() {
-        return DriverManager.getDriver().getCurrentUrl();
+        return getDriver().getCurrentUrl();
     }
 
     protected void navigateForward() {
-        DriverManager.getDriver().navigate().forward();
+        getDriver().navigate().forward();
     }
 
     protected void navigateBack() {
-        DriverManager.getDriver().navigate().back();
+        getDriver().navigate().back();
     }
 
     protected void refreshPage() {
-        DriverManager.getDriver().navigate().refresh();
+        getDriver().navigate().refresh();
     }
 
     protected WebElement getElement(By locator) {
@@ -181,7 +187,7 @@ public abstract class BasePage {
      * Returns true if at least one matching element exists.
      */
     protected boolean isElementPresent(By locator) {
-        return !DriverManager.getDriver()
+        return !getDriver()
                 .findElements(locator)
                 .isEmpty();
     }
@@ -198,7 +204,7 @@ public abstract class BasePage {
      */
     protected void openApplication(String url) {
         logger.info("Opening application: {}", url);
-        DriverManager.getDriver().get(url);
+        getDriver().get(url);
         waitUntilPageLoads();
         logger.info("Application loaded successfully");
     }

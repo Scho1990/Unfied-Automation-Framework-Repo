@@ -2,6 +2,7 @@ package utilities;
 
 import config.ConfigReader;
 import driver.DriverManager;
+import exceptions.WaitTimeoutException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -27,7 +28,7 @@ public final class WaitUtility {
             return getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
         }
         catch (TimeoutException e) {
-            throw new RuntimeException("Element not visible : " + locator, e);
+            throw new WaitTimeoutException("Element not visible : %s' ".formatted(locator), e);
         }
     }
 
@@ -69,7 +70,8 @@ public final class WaitUtility {
                 .withTimeout(Duration.ofSeconds(
                         ConfigReader.getIntProperty("explicit.wait")))
                 .pollingEvery(Duration.ofMillis(500))
-                .ignoring(Exception.class);
+                .ignoring(StaleElementReferenceException.class);
+
     }
 
     //TRY TO AVOID THIS STATIC WAIT IN ANYWHERE IN FRAMEWORK

@@ -15,7 +15,7 @@ public final class DriverManager {
         return DRIVER.get();
     }
 
-    public static void unloadDriver() {
+    public static void removeDriver() {
         DRIVER.remove();
     }
 

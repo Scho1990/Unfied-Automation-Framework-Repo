@@ -2,9 +2,7 @@ package testscripts;
 
 import base.BaseTest;
 import config.ConfigReader;
-import core.DirectoryManager;
-import core.FrameworkPaths;
-import driver.DriverFactory;
+import exceptions.FrameworkException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -65,7 +63,7 @@ public class ERailTest extends BaseTest {
 
             ExtentLogger.pass("Station suggestions matched successfully");
         } catch (IOException e) {
-            throw new RuntimeException("Unable to compare station suggestions", e);
+            throw new FrameworkException("Unable to compare station suggestions", e);
         }
     }
 }

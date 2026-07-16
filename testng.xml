@@ -10,7 +10,6 @@
         <classes>
             <class name="testscripts.ERailTest"/>
             <class name="testscripts.OrangeHRMLoginTest"/>
-            <class name="testscripts.FrameworkPathsTest"></class>
         </classes>
     </test>
 

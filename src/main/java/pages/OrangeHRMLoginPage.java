@@ -27,7 +27,7 @@ public class OrangeHRMLoginPage extends BasePage {
      *
      * @param username username
      */
-    public void enterUsername(String username) {
+    private void enterUsername(String username) {
         type(TXT_USERNAME, username);
     }
 
@@ -36,7 +36,7 @@ public class OrangeHRMLoginPage extends BasePage {
      *
      * @param password password
      */
-    public void enterPassword(String password) {
+    private void enterPassword(String password) {
         type(TXT_PASSWORD, password,true);
     }
 

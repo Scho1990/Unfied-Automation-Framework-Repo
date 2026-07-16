@@ -17,8 +17,7 @@ public final class DateUtility {
     };
 
     public static LocalDate getFutureDate(int days){
-        System.out.println("getFutureDate"+LocalDate.now().plusDays(days));
-        logger.info("getFutureDate"+LocalDate.now().plusDays(days));
+        logger.info("Future date calculated: {}",LocalDate.now().plusDays(days));
         return LocalDate.now().plusDays(days);
     }
     public static String getMonthYear(LocalDate date){
