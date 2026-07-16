@@ -16,6 +16,12 @@ public final class ExecutionSummary {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MMM-yyyy hh:mm:ss a", Locale.ENGLISH);
 
+    private static final String HEADER_SEPARATOR =
+            "============================================================";
+
+    private static final String SECTION_SEPARATOR =
+            "------------------------------------------------------------";
+
     private ExecutionSummary() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -36,7 +42,43 @@ public final class ExecutionSummary {
             int skipped,
             Instant endTime) {
         logger.info("Generating execution summary...");
+        int totalTests = getTotalTests(passed, failed, skipped);
+        Duration executionDuration =getExecutionDuration(endTime);
+        double successRate = calculateSuccessRate(passed,totalTests);
+        String startTime = formatExecutionTime(ExecutionContext.getStartTime());
+        String endTimeFormatted = formatExecutionTime(endTime);
+        String duration = formatExecutionDuration(executionDuration);
 
+        logger.info(HEADER_SEPARATOR);
+        logger.info("                 UAF EXECUTION SUMMARY");
+        logger.info(HEADER_SEPARATOR);
+
+        logKeyValue("Suite Name", suiteName);
+        logKeyValue("Execution ID", ExecutionContext.getExecutionId());
+        logKeyValue("Framework Version", ExecutionContext.getFrameworkVersion());
+        logKeyValue("Browser", ExecutionContext.getBrowser());
+        logKeyValue("Environment", ExecutionContext.getEnvironment());
+        logKeyValue("Java Version", ExecutionContext.getJavaVersion());
+        logKeyValue("Operating System",
+                ExecutionContext.getOsName() + " " + ExecutionContext.getOsVersion());
+        logKeyValue("User", ExecutionContext.getUserName());
+
+        logger.info(SECTION_SEPARATOR);
+
+        logKeyValue("Start Time", startTime);
+        logKeyValue("End Time", endTimeFormatted);
+        logKeyValue("Duration", duration);
+
+        logger.info(SECTION_SEPARATOR);
+
+        logKeyValue("Total Tests", totalTests);
+        logKeyValue("Passed", passed);
+        logKeyValue("Failed", failed);
+        logKeyValue("Skipped", skipped);
+        logKeyValue("Success Rate",
+                String.format("%.2f%%", successRate));
+
+        logger.info(HEADER_SEPARATOR);
     }
 
     private static int getTotalTests(int passed,int failed,int skipped) {
@@ -66,5 +108,9 @@ public final class ExecutionSummary {
         return DATE_TIME_FORMATTER
                 .withZone(ZoneId.systemDefault())
                 .format(instant);
+    }
+
+    private static void logKeyValue(String key, Object value) {
+        logger.info(String.format("%-20s : %s", key, value));
     }
 }
