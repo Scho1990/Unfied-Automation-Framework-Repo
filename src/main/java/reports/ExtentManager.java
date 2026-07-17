@@ -2,6 +2,7 @@ package reports;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import core.ExecutionContext;
 import core.FrameworkPaths;
 import reports.constants.ReportConstants;
@@ -31,6 +32,7 @@ public final class ExtentManager {
         ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportFile.toString());
         sparkReporter.config().setDocumentTitle(ReportConstants.DOCUMENT_TITLE);
         sparkReporter.config().setReportName(ReportConstants.REPORT_NAME);
+        sparkReporter.config().setTheme(Theme.DARK);
         return sparkReporter;
     }
 
