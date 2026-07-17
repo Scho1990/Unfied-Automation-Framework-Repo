@@ -6,10 +6,6 @@ This project is a production-ready Selenium Automation Framework developed using
 
 The framework follows the **Page Object Model (POM)** design pattern and is designed with maintainability, reusability, scalability, and thread-safe execution in mind.
 
-The framework demonstrates automation for two web applications:
-
-- **OrangeHRM**
-- **ERail**
 
 # Assumptions
 
