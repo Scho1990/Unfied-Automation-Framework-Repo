@@ -2,6 +2,7 @@ package pages;
 
 import base.BasePage;
 import config.ConfigReader;
+import constants.FrameworkConstants;
 import org.openqa.selenium.By;
 import reports.ExtentLogger;
 
@@ -105,7 +106,7 @@ public class OrangeHRMLoginPage extends BasePage {
 
     public OrangeHRMLoginPage openApplication() {
         ExtentLogger.info("Launching OrangeHRM application");
-        super.openApplication(ConfigReader.getProperty("orangehrm.url"));
+        super.openApplication(ConfigReader.getProperty(FrameworkConstants.ORANGEHRM_URL));
         getElement(TXT_USERNAME);
         ExtentLogger.pass("OrangeHRM application launched successfully");
         return this;

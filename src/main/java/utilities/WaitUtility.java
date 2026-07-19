@@ -1,6 +1,7 @@
 package utilities;
 
 import config.ConfigReader;
+import constants.FrameworkConstants;
 import driver.DriverManager;
 import exceptions.WaitTimeoutException;
 import org.openqa.selenium.*;
@@ -20,7 +21,7 @@ public final class WaitUtility {
     }
 
     private static WebDriverWait getWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(ConfigReader.getIntProperty("explicit.wait")));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(ConfigReader.getIntProperty(FrameworkConstants.EXPLICIT_WAIT)));
     }
 
     public static WebElement waitForVisibility(By locator) {
@@ -68,7 +69,7 @@ public final class WaitUtility {
     public static FluentWait<?> getFluentWait() {
         return new FluentWait<>(getDriver())
                 .withTimeout(Duration.ofSeconds(
-                        ConfigReader.getIntProperty("explicit.wait")))
+                        ConfigReader.getIntProperty(FrameworkConstants.EXPLICIT_WAIT)))
                 .pollingEvery(Duration.ofMillis(500))
                 .ignoring(StaleElementReferenceException.class);
 

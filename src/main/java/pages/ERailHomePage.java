@@ -2,6 +2,7 @@ package pages;
 
 import base.BasePage;
 import config.ConfigReader;
+import constants.FrameworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -27,7 +28,7 @@ public class ERailHomePage extends BasePage {
 
     public ERailHomePage openApplication(){
         ExtentLogger.info("Launching ERail application");
-        super.openApplication(ConfigReader.getProperty("erail.url"));
+        super.openApplication(ConfigReader.getProperty(FrameworkConstants.ERAIL_URL));
         getElement(TXT_FROM_STATION);
         ExtentLogger.pass("ERail application launched successfully");
         return this;

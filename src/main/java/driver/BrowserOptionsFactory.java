@@ -1,6 +1,8 @@
 package driver;
 
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.HashMap;
@@ -14,9 +16,7 @@ public final class BrowserOptionsFactory {
         if(headless){
             chromeOptions.addArguments("--headless=new");
         }
-        chromeOptions.addArguments("--disable-popup-blocking");
-        chromeOptions.addArguments("--disable-notifications");
-        chromeOptions.addArguments("--start-maximized");
+        addCommonChromiumArguments(chromeOptions);
         chromeOptions.setExperimentalOption("prefs", getChromiumPreferences());
         return chromeOptions;
     }
@@ -44,5 +44,25 @@ public final class BrowserOptionsFactory {
     }
 
 
+    public static EdgeOptions getEdgeOptions(boolean headless) {
+        EdgeOptions edgeOptions = new EdgeOptions();
+        if(headless){
+            edgeOptions.addArguments("--headless=new");
+        }
+        addCommonChromiumArguments(edgeOptions);
+        edgeOptions.setExperimentalOption("prefs", getChromiumPreferences());
+        return edgeOptions;
+    }
 
+    private static void addCommonChromiumArguments(ChromiumOptions<?> options) {
+
+        options.addArguments("--disable-notifications");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--start-maximized");
+        options.setAcceptInsecureCerts(true);
+
+    }
 }
