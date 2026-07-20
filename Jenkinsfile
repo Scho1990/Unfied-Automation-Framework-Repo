@@ -15,7 +15,7 @@ pipeline {
 
         choice(
            name: 'ENV',
-            choices: ['QA','UAT','PROD'],
+            choices: ['qa','uat','prod'],
             description: 'Select Environment')
 
         choice(
@@ -25,7 +25,7 @@ pipeline {
 
         choice(
             name: 'SUITE',
-            choices: ['smoke.xml','regression.xml','sanity.xml'],
+            choices: ['smoke','regression','sanity'],
             description: 'Select Test Suite')
     }
 
@@ -47,10 +47,12 @@ pipeline {
 
         stage('Print Environment') {
             steps {
-                echo "Browser   : ${params.BROWSER}"
-                echo "Execution : ${params.EXECUTION}"
+                echo "==================================="
+                echo "Browser     : ${params.BROWSER}"
+                echo "Execution   : ${params.EXECUTION}"
                 echo "Environment : ${params.ENV}"
-                echo "Suite : ${params.SUITE}"
+                echo "Suite       : ${params.SUITE}"
+                echo "==================================="
             }
 
         }
@@ -67,9 +69,17 @@ pipeline {
             }
         }
 
-        stage('Execute Smoke Suite') {
+        stage('Execute Test Suite') {
             steps {
-                bat 'mvn test -DsuiteXmlFile=testng/smoke.xml'
+
+                bat """
+                mvn test ^
+                -Dbrowser=${params.BROWSER} ^
+                -Dexecution=${params.EXECUTION} ^
+                -Denvironment=${params.ENV} ^
+                -DsuiteXmlFile=testng/${params.SUITE}.xml
+                """
+
             }
         }
     }
