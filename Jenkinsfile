@@ -29,9 +29,15 @@ pipeline {
             }
         }
 
-        stage('Execute Automation') {
+        stage('Compile') {
             steps {
-                bat 'mvn test'
+                bat 'mvn compile'
+            }
+        }
+
+        stage('Execute Smoke Suite') {
+            steps {
+                bat 'mvn test -DsuiteXmlFile=testng/testng.xml'
             }
         }
     }
@@ -40,14 +46,16 @@ pipeline {
 
         always {
             echo 'Pipeline Finished'
+            archiveArtifacts artifacts: 'test-output/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
         }
 
         success {
-            echo 'Automation Executed Successfully'
+            echo 'Smoke Suite Passed'
         }
 
         failure {
-            echo 'Automation Execution Failed'
+            echo 'Smoke Suite Failed'
         }
     }
 }

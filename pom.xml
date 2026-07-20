@@ -114,7 +114,8 @@
                 <configuration>
 
                     <suiteXmlFiles>
-                        <suiteXmlFile>testng/testng.xml</suiteXmlFile>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
                     </suiteXmlFiles>
 
                     <systemPropertyVariables>
