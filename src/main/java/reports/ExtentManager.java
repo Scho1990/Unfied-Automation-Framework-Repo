@@ -46,7 +46,10 @@ public final class ExtentManager {
         extentReports.setSystemInfo("Framework", "Unified Automation Framework "+ExecutionContext.getFrameworkVersion());
         extentReports.setSystemInfo("Framework Version", ExecutionContext.getFrameworkVersion());
         extentReports.setSystemInfo("Username", ExecutionContext.getUserName());
-        extentReports.setSystemInfo("Environment", ExecutionContext.getEnvironment());
+        extentReports.setSystemInfo("Environment", ExecutionContext.getEnvironment().toUpperCase());
+        extentReports.setSystemInfo("Build Number",System.getenv().getOrDefault("BUILD_NUMBER", ExecutionContext.getExecutionMode().toUpperCase()));
+        extentReports.setSystemInfo("Job Name",System.getenv().getOrDefault("JOB_NAME",ExecutionContext.getExecutionMode().toUpperCase()));
+        extentReports.setSystemInfo("Build URL",System.getenv().getOrDefault("BUILD_URL",ExecutionContext.getExecutionMode().toUpperCase()));
         extentReports.setSystemInfo("Browser", ExecutionContext.getBrowser().toString());
         extentReports.setSystemInfo("Java Version", ExecutionContext.getJavaVersion());
         extentReports.setSystemInfo("OS", ExecutionContext.getOsName());

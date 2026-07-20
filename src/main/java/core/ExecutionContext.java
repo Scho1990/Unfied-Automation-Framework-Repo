@@ -14,6 +14,7 @@ public final class ExecutionContext {
     private static Instant startTime;
     private static BrowserType browser;
     private static String environment;
+    private static String executionMode;
     private static boolean headless;
     private static String frameworkVersion;
     private static String javaVersion;
@@ -30,6 +31,7 @@ public final class ExecutionContext {
         startTime = Instant.now();
         browser = BrowserType.valueOf(ConfigReader.getPropertyOrSystem("browser").toUpperCase());
         environment = ConfigReader.getPropertyOrSystem("environment");
+        executionMode = ConfigReader.getPropertyOrSystem("execution");
         headless = ConfigReader.getBooleanProperty("headless");
         javaVersion = System.getProperty("java.version");
         osName = System.getProperty("os.name");
@@ -54,6 +56,7 @@ public final class ExecutionContext {
     public static String getEnvironment() {
         return environment;
     }
+    public static String getExecutionMode() {return executionMode;}
     public static String getJavaVersion() {
         return javaVersion;
     }
