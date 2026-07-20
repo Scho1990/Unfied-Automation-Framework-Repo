@@ -70,21 +70,21 @@ pipeline {
         }
 
         stage('Start Selenium Grid') {
-        echo '========== Starting Selenium Grid =========='
             when {
                 expression { params.EXECUTION == 'GRID' }
             }
             steps {
+                echo '========== Starting Selenium Grid =========='
                 bat 'docker compose -f docker/docker-compose.yml up -d'
             }
         }
 
         stage('Wait for Grid') {
-        echo '========== Waiting for the grid to up =========='
             when {
                 expression { params.EXECUTION == 'GRID' }
             }
             steps {
+                echo '========== Waiting for the grid to up =========='
                 sleep(time: 20, unit: 'SECONDS')
             }
         }
