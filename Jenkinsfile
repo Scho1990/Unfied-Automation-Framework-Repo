@@ -69,7 +69,7 @@ pipeline {
 
         stage('Execute Smoke Suite') {
             steps {
-                bat 'mvn test -DsuiteXmlFile=testng/testng.xml'
+                bat 'mvn test -DsuiteXmlFile=testng/smoke.xml'
             }
         }
     }
