@@ -13,10 +13,7 @@ public final class BrowserOptionsFactory {
 
     public static ChromeOptions getChromeOptions(boolean headless){
         ChromeOptions chromeOptions = new ChromeOptions();
-        if(headless){
-            chromeOptions.addArguments("--headless=new");
-        }
-        addCommonChromiumArguments(chromeOptions);
+        addCommonChromiumArguments(chromeOptions, headless);
         chromeOptions.setExperimentalOption("prefs", getChromiumPreferences());
         return chromeOptions;
     }
@@ -36,9 +33,9 @@ public final class BrowserOptionsFactory {
 
     private static Map<String, Object> getChromiumPreferences() {
         Map<String, Object> prefs = new HashMap<>();
-        // Block location permission popup
-        prefs.put("profile.default_content_setting_values.notifications", 2);
         // Disable notification permission popup
+        prefs.put("profile.default_content_setting_values.notifications", 2);
+        // Block location permission popup
         prefs.put("profile.default_content_setting_values.geolocation", 2);
         return prefs;
     }
@@ -46,16 +43,15 @@ public final class BrowserOptionsFactory {
 
     public static EdgeOptions getEdgeOptions(boolean headless) {
         EdgeOptions edgeOptions = new EdgeOptions();
-        if(headless){
-            edgeOptions.addArguments("--headless=new");
-        }
-        addCommonChromiumArguments(edgeOptions);
+        addCommonChromiumArguments(edgeOptions,headless);
         edgeOptions.setExperimentalOption("prefs", getChromiumPreferences());
         return edgeOptions;
     }
 
-    private static void addCommonChromiumArguments(ChromiumOptions<?> options) {
-
+    private static void addCommonChromiumArguments(ChromiumOptions<?> options,boolean headless) {
+        if(headless){
+            options.addArguments("--headless=new");
+        }
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-dev-shm-usage");

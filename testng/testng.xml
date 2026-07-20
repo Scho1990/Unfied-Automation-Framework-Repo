@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Automation Suite" parallel="methods" thread-count="10">
+<suite name="Automation Suite" parallel="methods" thread-count="5">
 
     <listeners>
         <listener class-name="listeners.TestListener"/>
@@ -9,6 +9,11 @@
     <test name="Smoke">
         <classes>
             <class name="testscripts.ERailTest"/>
+            <class name="testscripts.ERail2Test"/>
+            <class name="testscripts.ERail3Test"/>
+            <class name="testscripts.ERail4Test"/>
+            <class name="testscripts.ERail5Test"/>
+            <class name="testscripts.ERail6Test"/>
             <class name="testscripts.OrangeHRMLoginTest"/>
         </classes>
     </test>
