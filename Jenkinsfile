@@ -114,8 +114,9 @@ pipeline {
                     }
                 }
             echo 'Pipeline Finished'
-            archiveArtifacts artifacts: 'test-output/**', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+            archiveArtifacts (artifacts: 'logs/**', allowEmptyArchive: true,fingerprint: true)
+            archiveArtifacts (artifacts: 'reports/**', allowEmptyArchive: true,fingerprint: true)
+
         }
 
         success {

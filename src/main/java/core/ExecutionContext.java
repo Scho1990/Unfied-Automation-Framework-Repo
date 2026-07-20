@@ -1,15 +1,18 @@
 package core;
 
 import config.ConfigReader;
+import constants.FrameworkConstants;
 import enums.BrowserType;
 import lifecycle.FrameworkVersion;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.UUID;
 
 public final class ExecutionContext {
 
     private ExecutionContext() {}
-
     private static String executionId;
     private static Instant startTime;
     private static BrowserType browser;
@@ -27,7 +30,10 @@ public final class ExecutionContext {
         if (initialized) {
             return;
         }
-        executionId = UUID.randomUUID().toString();
+        //executionId = UUID.randomUUID().toString();
+        executionId = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS"))
+                + "_" + ConfigReader.getPropertyOrSystem(FrameworkConstants.BROWSER)
+                + "_" + ConfigReader.getPropertyOrSystem(FrameworkConstants.EXECUTION);
         startTime = Instant.now();
         browser = BrowserType.valueOf(ConfigReader.getPropertyOrSystem("browser").toUpperCase());
         environment = ConfigReader.getPropertyOrSystem("environment");
