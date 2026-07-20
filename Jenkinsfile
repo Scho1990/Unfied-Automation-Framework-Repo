@@ -69,6 +69,26 @@ pipeline {
             }
         }
 
+        stage('Start Selenium Grid') {
+        echo '========== Starting Selenium Grid =========='
+            when {
+                expression { params.EXECUTION == 'GRID' }
+            }
+            steps {
+                bat 'docker compose -f docker/docker-compose.yml up -d'
+            }
+        }
+
+        stage('Wait for Grid') {
+        echo '========== Waiting for the grid to up =========='
+            when {
+                expression { params.EXECUTION == 'GRID' }
+            }
+            steps {
+                sleep(time: 20, unit: 'SECONDS')
+            }
+        }
+
         stage('Execute Test Suite') {
             steps {
 
@@ -87,6 +107,12 @@ pipeline {
     post {
 
         always {
+
+          script {
+                    if (params.EXECUTION == 'GRID') {
+                        bat 'docker compose -f docker/docker-compose.yml down'
+                    }
+                }
             echo 'Pipeline Finished'
             archiveArtifacts artifacts: 'test-output/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
@@ -99,5 +125,8 @@ pipeline {
         failure {
             echo 'Smoke Suite Failed'
         }
+        cleanup {
+                cleanWs()
+            }
     }
 }
