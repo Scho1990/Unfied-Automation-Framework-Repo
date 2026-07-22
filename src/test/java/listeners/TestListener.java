@@ -40,7 +40,13 @@ public class TestListener implements ITestListener {
     public void onTestFailure(ITestResult result){
         logger.error("FAILED : {}", result.getMethod().getMethodName());
         logger.error(result.getThrowable().getMessage(), result.getThrowable());
-        String screenshotPath = ScreenshotUtility.captureScreenshot(result.getMethod().getMethodName());
+        String screenshotPath=null;
+        try {
+            screenshotPath = ScreenshotUtility.captureScreenshot(result.getMethod().getMethodName());
+        }
+        catch (Exception e){
+            logger.warn("Screenshot capture failed",e);
+        }
         ExtentLogger.fail(result.getThrowable());
         try {
             ExtentLogger.fail("Screenshot", MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
