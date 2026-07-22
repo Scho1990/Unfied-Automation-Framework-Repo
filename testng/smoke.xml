@@ -1,15 +1,17 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Automation Smoke Suite" parallel="methods" thread-count="5">
+<suite name="Automation Smoke Suite" parallel="methods" thread-count="1">
 
     <listeners>
         <listener class-name="listeners.TestListener"/>
+        <listener class-name="listeners.DynamicParallelModeAndThreadCountListener"/>
     </listeners>
 
     <test name="Smoke">
         <classes>
             <class name="testscripts.ERailTest"/>
             <class name="testscripts.OrangeHRMLoginTest"/>
+            <class name="testscripts.GoogleSearchResultTest"/>
         </classes>
     </test>
 

@@ -27,6 +27,18 @@ pipeline {
             name: 'SUITE',
             choices: ['smoke','regression','sanity'],
             description: 'Select Test Suite')
+
+        choice(
+            name: 'PARALLEL_MODE',
+             choices: ['methods', 'classes', 'tests'],
+             description: 'TestNG parallel mode'
+        )
+
+        string(
+             name: 'THREAD_COUNT',
+             defaultValue: '3',
+             description: 'Number of parallel threads'
+        )
     }
 
     stages {
@@ -48,10 +60,12 @@ pipeline {
         stage('Print Environment') {
             steps {
                 echo "==================================="
-                echo "Browser     : ${params.BROWSER}"
-                echo "Execution   : ${params.EXECUTION}"
-                echo "Environment : ${params.ENV}"
-                echo "Suite       : ${params.SUITE}"
+                echo "Browser       : ${params.BROWSER}"
+                echo "Execution     : ${params.EXECUTION}"
+                echo "Environment   : ${params.ENV}"
+                echo "Suite         : ${params.SUITE}"
+                echo "Parallel Mode : ${params.PARALLEL_MODE}"
+                echo "Thread Count  : ${params.THREAD_COUNT}"
                 echo "==================================="
             }
 
@@ -97,6 +111,8 @@ pipeline {
                 -Dbrowser=${params.BROWSER} ^
                 -Dexecution=${params.EXECUTION} ^
                 -Denvironment=${params.ENV} ^
+                -DparallelMode=${params.PARALLEL_MODE} ^
+                -DthreadCount=${params.THREAD_COUNT} ^
                 -DsuiteXmlFile=testng/${params.SUITE}.xml
                 """
 

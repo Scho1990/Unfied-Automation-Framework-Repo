@@ -15,6 +15,7 @@ public final class ConfigurationValidator {
     private static final List<String> REQUIRED_PROPERTIES = List.of(
             FrameworkConstants.ERAIL_URL,
             FrameworkConstants.ORANGEHRM_URL,
+            FrameworkConstants.GOOGLE_URL,
             FrameworkConstants.BROWSER,
             FrameworkConstants.HEADLESS,
             FrameworkConstants.EXECUTION,

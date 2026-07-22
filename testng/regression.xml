@@ -4,6 +4,7 @@
 
     <listeners>
         <listener class-name="listeners.TestListener"/>
+        <listener class-name="listeners.DynamicParallelModeAndThreadCountListener"/>
     </listeners>
 
     <test name="Regression">
@@ -14,7 +15,7 @@
             <class name="testscripts.ERail4Test"/>
             <class name="testscripts.ERail5Test"/>
             <class name="testscripts.ERail6Test"/>
-            <class name="testscripts.OrangeHRMLoginTest"/>
+            <class name="testscripts.GoogleSearchResultTest"/>
         </classes>
     </test>
 
