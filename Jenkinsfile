@@ -1,3 +1,33 @@
+//=============================================================
+// Unified Automation Framework
+// Enterprise Jenkins Pipeline
+//=============================================================
+
+//-------------------------------
+// Helper Method
+//-------------------------------
+def runTests(String browser) {
+
+    echo "=============================================="
+    echo "Browser        : ${browser}"
+    echo "Execution      : ${params.EXECUTION}"
+    echo "Environment    : ${params.ENV}"
+    echo "Suite          : ${params.SUITE}"
+    echo "Parallel Mode  : ${params.PARALLEL_MODE}"
+    echo "Thread Count   : ${params.THREAD_COUNT}"
+    echo "=============================================="
+
+    bat """
+        mvn clean test ^
+        -Dbrowser=${browser} ^
+        -Dexecution=${params.EXECUTION} ^
+        -Denvironment=${params.ENV} ^
+        -DparallelMode=${params.PARALLEL_MODE} ^
+        -DthreadCount=${params.THREAD_COUNT} ^
+        -DsuiteXmlFile=testng/${params.SUITE}.xml
+    """
+}
+
 pipeline {
 
     agent any
@@ -9,14 +39,19 @@ pipeline {
 
     parameters {
         choice(
+            name: 'EXECUTION_TYPE',
+            choices: ['SINGLE', 'CROSS_BROWSER'],
+            description: 'Execution Type')
+
+        choice(
             name: 'BROWSER',
-            choices: ['chrome','firefox','edge'],
-            description: 'Select Browser')
+            choices: ['CHROME','FIREFOX','EDGE'],
+            description: 'Browser (Used only for SINGLE execution)')
 
         choice(
            name: 'ENV',
-            choices: ['qa','uat','prod'],
-            description: 'Select Environment')
+            choices: ['QA','UAT','PROD'],
+            description: 'Environment')
 
         choice(
             name: 'EXECUTION',
@@ -25,19 +60,19 @@ pipeline {
 
         choice(
             name: 'SUITE',
-            choices: ['smoke','regression','sanity'],
-            description: 'Select Test Suite')
+            choices: ['smoke','regression'],
+            description: 'Test Suite')
 
         choice(
             name: 'PARALLEL_MODE',
              choices: ['methods', 'classes', 'tests'],
-             description: 'TestNG parallel mode'
+             description: 'TestNG Parallel Mode'
         )
 
         string(
              name: 'THREAD_COUNT',
              defaultValue: '3',
-             description: 'Number of parallel threads'
+             description: 'Parallel Thread Count'
         )
     }
 
@@ -60,12 +95,13 @@ pipeline {
         stage('Print Environment') {
             steps {
                 echo "==================================="
-                echo "Browser       : ${params.BROWSER}"
-                echo "Execution     : ${params.EXECUTION}"
-                echo "Environment   : ${params.ENV}"
-                echo "Suite         : ${params.SUITE}"
-                echo "Parallel Mode : ${params.PARALLEL_MODE}"
-                echo "Thread Count  : ${params.THREAD_COUNT}"
+                echo "Execution Type : ${params.EXECUTION_TYPE}"
+                echo "Browser        : ${params.BROWSER}"
+                echo "Execution      : ${params.EXECUTION}"
+                echo "Environment    : ${params.ENV}"
+                echo "Suite          : ${params.SUITE}"
+                echo "Parallel Mode  : ${params.PARALLEL_MODE}"
+                echo "Thread Count   : ${params.THREAD_COUNT}"
                 echo "==================================="
             }
 
@@ -89,6 +125,7 @@ pipeline {
             }
             steps {
                 echo '========== Starting Selenium Grid =========='
+                bat 'docker compose -f docker/docker-compose.yml down'
                 bat 'docker compose -f docker/docker-compose.yml up -d'
             }
         }
@@ -103,22 +140,29 @@ pipeline {
             }
         }
 
-        stage('Execute Test Suite') {
+        stage('Execute Tests') {
             steps {
-
-                bat """
-                mvn test ^
-                -Dbrowser=${params.BROWSER} ^
-                -Dexecution=${params.EXECUTION} ^
-                -Denvironment=${params.ENV} ^
-                -DparallelMode=${params.PARALLEL_MODE} ^
-                -DthreadCount=${params.THREAD_COUNT} ^
-                -DsuiteXmlFile=testng/${params.SUITE}.xml
-                """
-
+               script {
+                    if (params.EXECUTION_TYPE == 'SINGLE') {
+                        runTests(params.BROWSER.toLowerCase())
+                    }
+                    else {
+                       parallel(
+                             Chrome: {
+                                  runTests("chrome")
+                             },
+                             Firefox: {
+                                  runTests("firefox")
+                             },
+                             Edge: {
+                                  runTests("edge")
+                             }
+                       )
+                         }
+                    }
+               }
             }
         }
-    }
 
     post {
 
@@ -136,11 +180,19 @@ pipeline {
         }
 
         success {
-            echo 'Smoke Suite Passed'
+            echo "===================================="
+
+            echo "Build Successful"
+
+            echo "===================================="
         }
 
         failure {
-            echo 'Smoke Suite Failed'
+             echo "===================================="
+
+             echo "Build Failed"
+
+             echo "===================================="
         }
         cleanup {
                 cleanWs()
