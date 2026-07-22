@@ -63,4 +63,18 @@ services:
       - SE_NODE_MAX_SESSIONS=1
       - SE_NODE_OVERRIDE_MAX_SESSIONS=true
     restart: unless-stopped
+
+  edge-node-2:
+    image: selenium/node-edge:4.35.0
+    container_name: edge-node-1
+    depends_on:
+        - selenium-hub
+    shm_size: "2gb"
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=1
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    restart: unless-stopped
   
