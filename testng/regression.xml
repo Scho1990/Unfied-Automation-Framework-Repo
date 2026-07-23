@@ -5,6 +5,7 @@
     <listeners>
         <listener class-name="listeners.TestListener"/>
         <listener class-name="listeners.DynamicParallelModeAndThreadCountListener"/>
+        <listener class-name="retry.RetryTransformer"/>
     </listeners>
 
     <test name="Regression">
