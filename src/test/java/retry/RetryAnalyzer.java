@@ -18,7 +18,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
     public boolean retry(ITestResult result) {
         Throwable throwable = result.getThrowable();
         if(!RetryDecisionEngine.shouldRetry(throwable)) {
-            logger.info("Retry skipped because exception is not retryable");
+            logger.info("Retry skipped because exception is not retryable for : {} " ,result.getMethod().getMethodName());
             return false;
         }
 
