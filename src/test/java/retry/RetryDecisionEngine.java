@@ -1,5 +1,7 @@
 package retry;
 
+import config.ConfigReader;
+import constants.FrameworkConstants;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -20,5 +22,11 @@ public final class RetryDecisionEngine {
                 || throwable instanceof ElementClickInterceptedException
                 || throwable instanceof WebDriverException;
 
+    }
+
+    public static int getMaxRetryCount() {
+        String retry = System.getProperty("retryCount",
+                ConfigReader.getPropertyOrSystem(FrameworkConstants.RETRY_COUNT));
+        return Integer.parseInt(retry);
     }
 }

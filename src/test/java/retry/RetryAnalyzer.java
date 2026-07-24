@@ -10,41 +10,39 @@ import org.testng.ITestResult;
 public class RetryAnalyzer implements IRetryAnalyzer {
 
     private static final Logger logger = LogManager.getLogger(RetryAnalyzer.class);
-    private final int maxRetryCount = getMaxRetryCount();
+    private final int maxRetryCount = RetryDecisionEngine.getMaxRetryCount();
 
     private int retryCount = 0;
 
     @Override
     public boolean retry(ITestResult result) {
         Throwable throwable = result.getThrowable();
+        String testName = TestIdentifier.getTestKey(result);
         if(!RetryDecisionEngine.shouldRetry(throwable)) {
-            logger.info("Retry skipped because exception is not retryable for : {} " ,result.getMethod().getMethodName());
+            result.setAttribute(RetryConstants.RETRY_SCHEDULED, Boolean.FALSE);
+            logger.info("Retry skipped because exception is not retryable for : {} " ,testName);
             return false;
         }
 
         if (retryCount < maxRetryCount) {
             retryCount++;
-            RetryStatistics.recordRetry(result.getMethod().getMethodName());
+            RetryStatistics.recordRetry(testName);
             logger.warn(
                     "Retrying Test '{}' | Attempt {}/{} | Exception : {}",
-                    result.getMethod().getMethodName(),
+                    testName,
                     retryCount,
                     maxRetryCount,
                     throwable.getClass().getSimpleName()
             );
+            result.setAttribute(RetryConstants.RETRY_SCHEDULED,Boolean.TRUE);
             return true;
         }
         logger.info(
                 "Maximum retry attempts ({}) exhausted for test '{}'",
                 maxRetryCount,
-                result.getMethod().getMethodName()
+                testName
         );
+        result.setAttribute(RetryConstants.RETRY_SCHEDULED,Boolean.FALSE);
         return false;
-    }
-
-    private int getMaxRetryCount() {
-        String retry = System.getProperty("retryCount",
-                ConfigReader.getPropertyOrSystem(FrameworkConstants.RETRY_COUNT));
-        return Integer.parseInt(retry);
     }
 }

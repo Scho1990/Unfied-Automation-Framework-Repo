@@ -74,6 +74,10 @@ public final class RetryStatistics {
         return Collections.unmodifiableMap(retryCountPerTest);
     }
 
+    public static int getRetryCount(String testName) {
+        return retryCountPerTest.getOrDefault(testName, 0);
+    }
+
     public static void reset() {
         totalRetryAttempts.set(0);
         totalRetriedTests.set(0);
