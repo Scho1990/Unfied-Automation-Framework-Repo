@@ -16,6 +16,7 @@ public final class ConfigurationValidator {
             FrameworkConstants.ERAIL_URL,
             FrameworkConstants.ORANGEHRM_URL,
             FrameworkConstants.GOOGLE_URL,
+            FrameworkConstants.SHADOWDOM_URL,
             FrameworkConstants.BROWSER,
             FrameworkConstants.HEADLESS,
             FrameworkConstants.EXECUTION,

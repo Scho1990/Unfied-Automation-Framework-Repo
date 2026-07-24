@@ -22,5 +22,6 @@ public final class FrameworkConstants
     public static final String ERAIL_URL = "erail.url";
     public static final String ORANGEHRM_URL = "orangehrm.url";
     public static final String GOOGLE_URL = "google.url";
+    public static final String SHADOWDOM_URL = "shadowdom.url";
 
 }
