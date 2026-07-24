@@ -24,6 +24,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 
         if (retryCount < maxRetryCount) {
             retryCount++;
+            RetryStatistics.recordRetry(result.getMethod().getMethodName());
             logger.warn(
                     "Retrying Test '{}' | Attempt {}/{} | Exception : {}",
                     result.getMethod().getMethodName(),
@@ -33,6 +34,11 @@ public class RetryAnalyzer implements IRetryAnalyzer {
             );
             return true;
         }
+        logger.info(
+                "Maximum retry attempts ({}) exhausted for test '{}'",
+                maxRetryCount,
+                result.getMethod().getMethodName()
+        );
         return false;
     }
 
