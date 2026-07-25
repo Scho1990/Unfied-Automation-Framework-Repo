@@ -13,10 +13,7 @@ import org.testng.ITestResult;
 import reports.ExtentLogger;
 import reports.ExtentManager;
 import reports.ExtentTestManager;
-import retry.RetryConstants;
-import retry.RetryDecisionEngine;
-import retry.RetryStatistics;
-import retry.TestIdentifier;
+import retry.*;
 import utilities.ScreenshotUtility;
 
 import java.time.Instant;
@@ -105,6 +102,7 @@ public class TestListener implements ITestListener {
         int skipped = context.getSkippedTests().size();
 
         ExecutionSummary.logExecutionSummary(context.getSuite().getName(), passed, failed, skipped, Instant.now());
+        RetrySummary.logSummary();
 
         ExtentManager.getExtentReports().flush();
         ExtentTestManager.unload();
