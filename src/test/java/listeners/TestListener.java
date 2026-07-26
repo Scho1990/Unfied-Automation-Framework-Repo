@@ -2,7 +2,6 @@ package listeners;
 
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import constants.FrameworkConstants;
 import lifecycle.ExecutionSummary;
 import lifecycle.FrameworkBootstrap;
 import org.apache.logging.log4j.LogManager;
@@ -15,9 +14,7 @@ import reports.ExtentManager;
 import reports.ExtentTestManager;
 import retry.*;
 import utilities.ScreenshotUtility;
-
 import java.time.Instant;
-import java.util.Map;
 
 public class TestListener implements ITestListener {
     private static final Logger logger = LogManager.getLogger(TestListener.class);
@@ -53,12 +50,12 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result){
         String testName = getTestName(result);
-        logger.info("RetryScheduled Attribute : {}",
+        logger.debug("RetryScheduled Attribute : {}",
                 result.getAttribute(RetryConstants.RETRY_SCHEDULED));
-        logger.info("Retry Count : {}",
+        logger.debug("Retry Count : {}",
                 RetryStatistics.getRetryCount(testName));
 
-        logger.info("Was Retried : {}",
+        logger.debug("Was Retried : {}",
                 wasRetried(testName));
         Boolean retryScheduled = (Boolean) result.getAttribute(RetryConstants.RETRY_SCHEDULED);
         if (Boolean.FALSE.equals(retryScheduled)) {
@@ -101,7 +98,11 @@ public class TestListener implements ITestListener {
         int failed = context.getFailedTests().size();
         int skipped = context.getSkippedTests().size();
 
-        ExecutionSummary.logExecutionSummary(context.getSuite().getName(), passed, failed, skipped, Instant.now());
+        ExecutionSummary.logSummary(context.getSuite().getName(), passed, failed, skipped, Instant.now());
+
+        ExtentTestManager.setTest(
+                ExtentManager.getExtentReports()
+                        .createTest("Retry Summary"));
         RetrySummary.logSummary();
 
         ExtentManager.getExtentReports().flush();
@@ -110,10 +111,11 @@ public class TestListener implements ITestListener {
         logger.info("========================================");
     }
 
+    // UI/logging
     private String getDisplayName(ITestResult result){
         return result.getTestClass().getRealClass().getSimpleName()+" :: "+result.getMethod().getMethodName();
     }
-
+    // framework internals
     private String getTestName(ITestResult result){
         return TestIdentifier.getTestKey(result);
     }

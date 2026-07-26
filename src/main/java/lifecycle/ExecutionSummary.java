@@ -35,7 +35,7 @@ public final class ExecutionSummary {
      * @param skipped   Number of skipped tests
      * @param endTime   Execution end time
      */
-    public static void logExecutionSummary(
+    public static void logSummary(
             String suiteName,
             int passed,
             int failed,

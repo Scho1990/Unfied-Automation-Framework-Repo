@@ -2,6 +2,7 @@ package retry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import reports.ExtentLogger;
 
 import java.util.Map;
 
@@ -22,35 +23,35 @@ public final class RetrySummary {
 
     private static void logHeader(){
 
-        logger.info(SEPARATOR);
-        logger.info("                    RETRY SUMMARY");
-        logger.info(SEPARATOR);
+        log(SEPARATOR);
+        log("                    RETRY SUMMARY");
+        log(SEPARATOR);
 
     }
 
     private static void logMetrics(){
 
-        logger.info(
-                "Total Retry Attempts      : {}",
-                RetryStatistics.getTotalRetryAttempts());
+        log(String.format(
+                "Total Retry Attempts      : %d",
+                RetryStatistics.getTotalRetryAttempts()));
 
-        logger.info(
-                "Unique Retried Tests      : {}",
-                RetryStatistics.getTotalRetriedTests());
+        log(
+                String.format("Unique Retried Tests      : %d",
+                RetryStatistics.getTotalRetriedTests()));
 
-        logger.info(
-                "Passed After Retry        : {}",
-                RetryStatistics.getPassedAfterRetry());
+        log(
+                String.format("Passed After Retry        : %d",
+                RetryStatistics.getPassedAfterRetry()));
 
-        logger.info(
-                "Failed After Retry        : {}",
-                RetryStatistics.getFailedAfterRetry());
+        log(
+                String.format("Failed After Retry        : %d",
+                RetryStatistics.getFailedAfterRetry()));
 
-        logger.info(
-                "Retry Success Rate        : {}%",
-                String.format("%.2f", calculateRetrySuccessRate()));
+        log(String.format(
+                "Retry Success Rate        : %.2f%%",
+                calculateRetrySuccessRate()));
 
-        logger.info(SUB_SEPARATOR);
+        log(SUB_SEPARATOR);
     }
 
     private static double calculateRetrySuccessRate(){
@@ -66,24 +67,34 @@ public final class RetrySummary {
 
     private static void logRetryBreakdown(){
 
-        logger.info("Per-Test Retry Count");
-        logger.info(SUB_SEPARATOR);
+        log("Per-Test Retry Count");
+        log(SUB_SEPARATOR);
 
         Map<String, Integer> retryCountMap = RetryStatistics.getRetryCountPerTest();
 
         if(retryCountMap.isEmpty()){
-            logger.info("No tests required retry.");
+            log("No tests required retry.");
             return;
         }
 
         retryCountMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> logger.info(
+                .forEach(entry -> log(
                         String.format(
                                 "%-35s : %d",
                                 entry.getKey(),
                                 entry.getValue())));
+    }
+
+    /**
+     * Logs the supplied message to both Log4j and Extent Report.
+     *
+     * @param message message to log
+     */
+    private static void log(String message){
+        logger.info(message);
+        ExtentLogger.info(message);
     }
 
     private static void logFooter(){
