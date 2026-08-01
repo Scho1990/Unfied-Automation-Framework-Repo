@@ -1,15 +1,40 @@
 package api.config;
 
-import api.constants.ApiConstants;
+import api.authentication.oauth.OAuthConfiguration;
 import config.ConfigReader;
 
 public final class ApiConfig {
 
+    private static OAuthConfiguration spotifyOAuthConfiguration;
     private ApiConfig() {
     }
 
     public static String getBaseUrl() {
         return ConfigReader.getPropertyOrSystem("api.base.url");
+    }
+
+    public static String getSpotifyAuthorizationUrl() {
+        return ConfigReader.getPropertyOrSystem("spotify.authorization.url");
+    }
+
+    public static String getSpotifyTokenUrl() {
+        return ConfigReader.getPropertyOrSystem("spotify.token.url");
+    }
+
+    public static String getSpotifyClientId() {
+        return ConfigReader.getPropertyOrSystem("spotify.client.id");
+    }
+
+    public static String getSpotifyClientSecret() {
+        return ConfigReader.getPropertyOrSystem("spotify.client.secret");
+    }
+
+    public static String getSpotifyRedirectUri() {
+        return ConfigReader.getPropertyOrSystem("spotify.redirect.uri");
+    }
+
+    public static String getSpotifyScope() {
+        return ConfigReader.getPropertyOrSystem("spotify.scopes");
     }
 
     public static String getContentType() {
@@ -37,6 +62,20 @@ public final class ApiConfig {
 
     public static String getApiKey(){
         return ConfigReader.getProperty("api.key");
+    }
+
+    public static OAuthConfiguration getSpotifyOAuthConfiguration() {
+
+        if (spotifyOAuthConfiguration == null) {
+
+            spotifyOAuthConfiguration = new OAuthConfiguration(getSpotifyAuthorizationUrl(),
+                    getSpotifyTokenUrl(),
+                    getSpotifyClientId(),
+                    getSpotifyClientSecret(),
+                    getSpotifyRedirectUri(),
+                    getSpotifyScope());
+        }
+        return spotifyOAuthConfiguration;
     }
 
 }
