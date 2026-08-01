@@ -1,8 +1,13 @@
 package api.authentication.oauth;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class SpotifyOAuthService {
@@ -41,5 +46,63 @@ public class SpotifyOAuthService {
         logger.info("Spotify OAuth authorization URL generated successfully.");
         logger.debug("Spotify OAuth authorization URL generated successfully: {}", authorizationUrl);
         return authorizationUrl;
+    }
+
+    public OAuthToken exchangeAuthorizationCode(String authorizationCode) {
+
+        Objects.requireNonNull(authorizationCode, "Authorization Code cannot be null.");
+
+        logger.info("Exchanging authorization code for OAuth access token.");
+
+        Response response = RestAssured
+                .given()
+                   .contentType(ContentType.URLENC)
+                   .formParam(OAuthConstants.GRANT_TYPE, OAuthGrantType.AUTHORIZATION_CODE.getValue())
+                   .formParam(OAuthConstants.CODE, authorizationCode)
+                   .formParam(OAuthConstants.REDIRECT_URI, oAuthConfiguration.getRedirectUri())
+                   .formParam(OAuthConstants.CLIENT_ID, oAuthConfiguration.getClientId())
+                   .formParam(OAuthConstants.CLIENT_SECRET, oAuthConfiguration.getClientSecret())
+                .post(oAuthConfiguration.getTokenUrl())
+                .then()
+                   .extract()
+                .response();
+
+        validateTokenResponse(response);
+        logger.info("Authorization code exchanged successfully.");
+
+        return mapToken(response);
+    }
+
+    /**
+     * Validates Spotify OAuth token response.
+     *
+     * @param response RestAssured response
+     */
+    public void validateTokenResponse(Response response) {
+
+        Objects.requireNonNull(response, "Response cannot be null.");
+        logger.info("Validating token response.");
+        if (response.getStatusCode() != HttpStatus.SC_OK) {
+
+            logger.error("Spotify OAuth token exchange failed. HTTP Status {}.", response.getStatusCode());
+
+            throw new IllegalArgumentException(String.format("Spotify OAuth token exchange failed. HTTP Status %d.",
+                    response.getStatusCode()));
+        }
+    }
+
+    private OAuthToken mapToken(Response response) {
+
+        OAuthToken token = response.as(OAuthToken.class);
+
+        if (token == null) {
+            throw new IllegalArgumentException("Failed to deserialize Spotify OAuth response.");
+        }
+
+        token.setIssuedAt(Instant.now());
+
+        logger.info("OAuth Token received successfully.");
+
+        return token;
     }
 }
