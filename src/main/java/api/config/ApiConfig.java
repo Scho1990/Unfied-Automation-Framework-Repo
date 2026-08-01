@@ -35,5 +35,9 @@ public final class ApiConfig {
         return ConfigReader.getBooleanProperty("api.log.response");
     }
 
+    public static String getApiKey(){
+        return ConfigReader.getProperty("api.key");
+    }
+
 }
 
