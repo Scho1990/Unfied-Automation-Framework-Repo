@@ -14,10 +14,10 @@ public final class OAuthStateGenerator {
     }
 
     public static String generateState(){
-        byte[] randomnesses = new byte[STATE_LENGTH];
-        SECURE_RANDOM.nextBytes(randomnesses);
+        byte[] randomBytes = new byte[STATE_LENGTH];
+        SECURE_RANDOM.nextBytes(randomBytes);
         return Base64.getUrlEncoder()
                 .withoutPadding()
-                .encodeToString(randomnesses);
+                .encodeToString(randomBytes);
     }
 }

@@ -19,7 +19,7 @@ public class SpotifyOAuthService {
      *
      * @param oAuthConfiguration OAuth configuration
      */
-    public SpotifyOAuthService(OAuthConfiguration oAuthConfiguration) {
+     SpotifyOAuthService(OAuthConfiguration oAuthConfiguration) {
         this.oAuthConfiguration = Objects.requireNonNull(
                 oAuthConfiguration,
                 "OAuthConfiguration cannot be null."
@@ -78,7 +78,7 @@ public class SpotifyOAuthService {
      *
      * @param response RestAssured response
      */
-    public void validateTokenResponse(Response response) {
+    private void validateTokenResponse(Response response) {
 
         Objects.requireNonNull(response, "Response cannot be null.");
         logger.info("Validating token response.");
@@ -86,7 +86,7 @@ public class SpotifyOAuthService {
 
             logger.error("Spotify OAuth token exchange failed. HTTP Status {}.", response.getStatusCode());
 
-            throw new IllegalArgumentException(String.format("Spotify OAuth token exchange failed. HTTP Status %d.",
+            throw new IllegalStateException(String.format("Spotify OAuth token exchange failed. HTTP Status %d.",
                     response.getStatusCode()));
         }
     }
