@@ -1,7 +1,6 @@
 package api.specifications;
 
 import api.authentication.oauth.OAuthConstants;
-import api.client.BaseApiClient;
 import api.config.ApiConfig;
 import api.constants.ApiConstants;
 import api.manager.TokenManager;
@@ -12,7 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 
 public final class RequestSpecFactory {
+
     private static final Logger logger = LogManager.getLogger(RequestSpecFactory.class);
+
     private RequestSpecFactory() {
         throw new UnsupportedOperationException("Utility class");
     }
