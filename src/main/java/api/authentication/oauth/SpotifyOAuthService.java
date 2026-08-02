@@ -82,6 +82,8 @@ public class SpotifyOAuthService {
 
         Objects.requireNonNull(response, "Response cannot be null.");
         logger.info("Validating token response.");
+        logger.info("Status Code : {}", response.getStatusCode());
+        logger.info("Response Body : {}", response.asPrettyString());
         if (response.getStatusCode() != HttpStatus.SC_OK) {
 
             logger.error("Spotify OAuth token exchange failed. HTTP Status {}.", response.getStatusCode());

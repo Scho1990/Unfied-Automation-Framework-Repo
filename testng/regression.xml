@@ -10,15 +10,16 @@
 
     <test name="Regression">
         <classes>
-            <!--<class name="testscripts.ERailTest"/>
+         <!--   <class name="testscripts.ERailTest"/>
             <class name="testscripts.ERail2Test"/>
             <class name="testscripts.ERail3Test"/>
             <class name="testscripts.ERail4Test"/>
             <class name="testscripts.ERail5Test"/>
             <class name="testscripts.ERail6Test"/>
             <class name="testscripts.GoogleSearchResultTest"/>
-            <class name="testscripts.ShadowRootResultTest"/>-->
-            <class name="testscripts.UserApiTest"/>
+            <class name="testscripts.ShadowRootResultTest"/>
+            <class name="testscripts.UserApiTest"/>-->
+            <class name="testscripts.spotify.PlaylistsApiTest"/>
         </classes>
     </test>
 

@@ -8,4 +8,5 @@ public final class ApiConstants {
     }
 
     public static final String BEARER = "Bearer ";
+    public static final String API_KEY = "x-api-key";
 }

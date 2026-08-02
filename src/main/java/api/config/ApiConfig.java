@@ -17,6 +17,10 @@ public final class ApiConfig {
         return ConfigReader.getPropertyOrSystem("spotify.authorization.url");
     }
 
+    public static String getAuthorizationCode() {
+        return ConfigReader.getProperty("spotify.authorization.code");
+    }
+
     public static String getSpotifyTokenUrl() {
         return ConfigReader.getPropertyOrSystem("spotify.token.url");
     }

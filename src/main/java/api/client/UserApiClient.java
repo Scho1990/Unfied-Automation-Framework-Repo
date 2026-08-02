@@ -7,16 +7,6 @@ import java.util.Map;
 
 public class UserApiClient extends BaseApiClient {
 
-    @Override
-    protected Response get(String endpoint, Map<String, ?> queryParams) {
-        return null;
-    }
-
-    @Override
-    protected Response get(String endpoint, Map<String, ?> queryParams, Map<String, ?> headers) {
-        return null;
-    }
-
     public Response getUser(int userid){
         return get(UserEndpoints.userById(userid));
     }
