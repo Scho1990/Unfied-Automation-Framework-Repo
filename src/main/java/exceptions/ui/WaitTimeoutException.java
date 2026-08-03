@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.ui;
 
-public class WaitTimeoutException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public class WaitTimeoutException extends UiException {
     public WaitTimeoutException(String message) {
         super(message);
     }

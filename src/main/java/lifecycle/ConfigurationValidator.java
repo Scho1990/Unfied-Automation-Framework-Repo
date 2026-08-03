@@ -4,7 +4,7 @@ import config.ConfigReader;
 import constants.FrameworkConstants;
 import enums.BrowserType;
 import enums.ExecutionType;
-import exceptions.ConfigurationException;
+import exceptions.configuration.ConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;

@@ -1,5 +1,12 @@
-package api.authentication.oauth;
+package api.authentication.oauth.service;
 
+import api.authentication.oauth.utility.AuthorizationUrlBuilder;
+import api.authentication.oauth.utility.OAuthStateGenerator;
+import api.authentication.oauth.configuration.OAuthConfiguration;
+import api.authentication.oauth.configuration.OAuthConstants;
+import api.authentication.oauth.configuration.OAuthGrantType;
+import api.authentication.oauth.configuration.OAuthResponseType;
+import api.authentication.oauth.model.OAuthToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -71,6 +78,41 @@ public class SpotifyOAuthService {
         logger.info("Authorization code exchanged successfully.");
 
         return mapToken(response);
+    }
+
+    public OAuthToken refreshAccessToken(String refreshToken) {
+        Objects.requireNonNull(refreshToken, "Refresh token cannot be null.");
+
+        Response response = RestAssured
+                .given()
+                .contentType(ContentType.URLENC)
+                .auth()
+                .preemptive()
+                .basic(
+                        oAuthConfiguration.getClientId(),
+                        oAuthConfiguration.getClientSecret()
+                )
+                .formParam(
+                        OAuthConstants.GRANT_TYPE,
+                        OAuthGrantType.REFRESH_TOKEN.getValue()
+                )
+                .formParam(OAuthConstants.REFRESH_TOKEN, refreshToken)
+                .when()
+                .post(oAuthConfiguration.getTokenUrl())
+                .then()
+                .extract()
+                .response();
+
+        validateTokenResponse(response);
+
+        OAuthToken refreshedToken = mapToken(response);
+
+        // Spotify may not return a new refresh token.
+        if (!refreshedToken.hasRefreshToken()) {
+            refreshedToken.setRefreshToken(refreshToken);
+        }
+
+        return refreshedToken;
     }
 
     /**

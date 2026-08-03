@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.ui;
 
-public final class ScreenshotException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public final class ScreenshotException extends UiException {
     public ScreenshotException(String message) {
         super(message);
     }

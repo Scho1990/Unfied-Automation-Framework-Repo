@@ -1,7 +1,9 @@
 package api.config;
 
-import api.authentication.oauth.OAuthConfiguration;
+import api.authentication.oauth.configuration.OAuthConfiguration;
+import api.authentication.oauth.storage.TokenStoreType;
 import config.ConfigReader;
+import exceptions.api.ApiConfigurationException;
 
 public final class ApiConfig {
 
@@ -41,6 +43,10 @@ public final class ApiConfig {
         return ConfigReader.getPropertyOrSystem("spotify.scopes");
     }
 
+    public static String getSpotifyRefreshToken() {
+        return ConfigReader.getPropertyOrSystem("spotify.refresh.token");
+    }
+
     public static String getContentType() {
         return ConfigReader.getProperty("api.content.type");
     }
@@ -66,6 +72,23 @@ public final class ApiConfig {
 
     public static String getApiKey(){
         return ConfigReader.getProperty("api.key");
+    }
+
+    public static TokenStoreType getTokenStoreType() {
+        String value = ConfigReader
+                .getProperty("oauth.token.store.type");
+        try {
+            return TokenStoreType.valueOf(value.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new ApiConfigurationException("Unsupported OAuth Token Store Type: " + value,e);
+        }
+    }
+
+    public static String getOAuthTokenStorePath() {
+
+        return ConfigReader
+                .getProperty("oauth.token.store.path")
+                .trim();
     }
 
     public static OAuthConfiguration getSpotifyOAuthConfiguration() {

@@ -1,6 +1,6 @@
 package config;
 
-import exceptions.ConfigurationException;
+import exceptions.configuration.ConfigurationException;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.data;
 
-public final class DataProviderException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public final class DataProviderException extends FrameworkException {
     public DataProviderException(String message) {
         super(message);
     }

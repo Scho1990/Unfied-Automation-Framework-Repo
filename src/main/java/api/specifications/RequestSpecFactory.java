@@ -1,9 +1,9 @@
 package api.specifications;
 
-import api.authentication.oauth.OAuthConstants;
+import api.authentication.oauth.configuration.OAuthConstants;
 import api.config.ApiConfig;
 import api.constants.ApiConstants;
-import api.manager.TokenManager;
+import api.authentication.oauth.manager.TokenManager;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.logging.log4j.LogManager;

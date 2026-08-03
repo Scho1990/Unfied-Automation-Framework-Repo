@@ -3,7 +3,7 @@ package utilities;
 import config.ConfigReader;
 import constants.FrameworkConstants;
 import driver.DriverManager;
-import exceptions.WaitTimeoutException;
+import exceptions.ui.WaitTimeoutException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;

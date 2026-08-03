@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.configuration;
 
-public final class ConfigurationException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public final class ConfigurationException extends FrameworkException {
     public ConfigurationException(String message) {
         super(message);
     }

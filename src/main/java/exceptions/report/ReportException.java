@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.report;
 
-public final class ReportException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public final class ReportException extends FrameworkException {
     public ReportException(String message) {
         super(message);
     }

@@ -1,4 +1,4 @@
-package api.authentication.oauth;
+package api.authentication.oauth.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

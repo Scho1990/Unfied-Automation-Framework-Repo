@@ -1,4 +1,4 @@
-package api.authentication.oauth;
+package api.authentication.oauth.configuration;
 
 public final class OAuthConstants {
 

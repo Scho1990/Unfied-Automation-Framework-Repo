@@ -1,4 +1,7 @@
-package api.authentication.oauth;
+package api.authentication.oauth.utility;
+
+import api.authentication.oauth.configuration.OAuthConstants;
+import api.authentication.oauth.configuration.OAuthResponseType;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +23,7 @@ public final class AuthorizationUrlBuilder {
      * @param state Optional state parameter (recommended for CSRF protection)
      * @return Complete OAuth Authorization URL
      */
-    public static String buildAuthorizationUrl(String authorizationEndpoint,String clientId, String redirectUri,String scope,OAuthResponseType responseType,String state) {
+    public static String buildAuthorizationUrl(String authorizationEndpoint, String clientId, String redirectUri, String scope, OAuthResponseType responseType, String state) {
        validateRequiredParameters(authorizationEndpoint, clientId, redirectUri, responseType);
 
        StringBuilder builder = new StringBuilder();

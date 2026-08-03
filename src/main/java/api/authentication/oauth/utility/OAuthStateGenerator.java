@@ -1,4 +1,4 @@
-package api.authentication.oauth;
+package api.authentication.oauth.utility;
 
 import java.security.SecureRandom;
 import java.util.Base64;

@@ -1,7 +1,7 @@
 package dataprovider;
 
 import config.ConfigReader;
-import exceptions.DataProviderException;
+import exceptions.data.DataProviderException;
 import org.testng.annotations.DataProvider;
 import utilities.ExcelUtility;
 import java.io.IOException;

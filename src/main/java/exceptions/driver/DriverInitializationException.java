@@ -1,6 +1,8 @@
-package exceptions;
+package exceptions.driver;
 
-public final class DriverInitializationException extends FrameworkException{
+import exceptions.FrameworkException;
+
+public final class DriverInitializationException extends FrameworkException {
     public DriverInitializationException(String message) {
         super(message);
     }

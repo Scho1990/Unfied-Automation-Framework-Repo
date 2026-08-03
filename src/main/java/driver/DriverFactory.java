@@ -4,7 +4,7 @@ import config.ConfigReader;
 import constants.FrameworkConstants;
 import enums.BrowserType;
 import enums.ExecutionType;
-import exceptions.DriverInitializationException;
+import exceptions.driver.DriverInitializationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.MutableCapabilities;
