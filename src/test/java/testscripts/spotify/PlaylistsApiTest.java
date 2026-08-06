@@ -20,7 +20,7 @@ public class PlaylistsApiTest {
 
  @BeforeSuite(alwaysRun = true)
  public void initializeSpotifyToken() {
-  SpotifyOAuthService service = OAuthServiceFactory.spotify();
+  SpotifyOAuthService service = OAuthServiceFactory.createSpotifyOAuthService();
 
   OAuthToken token = service.refreshAccessToken(
           ApiConfig.getSpotifyRefreshToken()
@@ -30,7 +30,7 @@ public class PlaylistsApiTest {
  }
     @Test(description = "Verify user can create Spotify playlist")
     public void verifyCreatePlaylist() {
-       SpotifyOAuthService oAuthService = OAuthServiceFactory.spotify();
+       SpotifyOAuthService oAuthService = OAuthServiceFactory.createSpotifyOAuthService();
 
         String authorizationUrl = oAuthService.getAuthorizationUrl();
 

@@ -2,6 +2,7 @@ package api.authentication.oauth.utility;
 
 import api.authentication.oauth.configuration.OAuthConstants;
 import api.authentication.oauth.configuration.OAuthResponseType;
+import exceptions.api.OAuthException;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -73,19 +74,19 @@ public final class AuthorizationUrlBuilder {
      */
     private static void validateRequiredParameters(String authorizationEndpoint,String clientId, String redirectUri,OAuthResponseType responseType){
         if (isBlank(authorizationEndpoint)){
-            throw new IllegalArgumentException("Authorization endpoint cannot be null or blank.");
+            throw new OAuthException("Authorization endpoint cannot be null or blank.");
         }
 
         if (isBlank(clientId)){
-            throw new IllegalArgumentException("Client ID cannot be null or blank.");
+            throw new OAuthException("Client ID cannot be null or blank.");
         }
 
         if (isBlank(redirectUri)){
-            throw new IllegalArgumentException("Redirect URI cannot be null or blank.");
+            throw new OAuthException("Redirect URI cannot be null or blank.");
         }
 
         if (responseType == null){
-            throw new IllegalArgumentException("Response Type cannot be null.");
+            throw new OAuthException("Response Type cannot be null.");
         }
     }
 

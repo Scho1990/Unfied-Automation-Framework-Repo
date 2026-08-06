@@ -7,6 +7,7 @@ import api.authentication.oauth.configuration.OAuthConstants;
 import api.authentication.oauth.configuration.OAuthGrantType;
 import api.authentication.oauth.configuration.OAuthResponseType;
 import api.authentication.oauth.model.OAuthToken;
+import exceptions.api.OAuthException;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -19,18 +20,17 @@ import java.util.Objects;
 
 public class SpotifyOAuthService {
     private static final Logger logger = LogManager.getLogger(SpotifyOAuthService.class);
-    private final OAuthConfiguration oAuthConfiguration;
+    private final OAuthConfiguration configuration;
+    private final SpotifyTokenService tokenService;
 
     /**
      * Creates a new Spotify OAuth Service.
      *
-     * @param oAuthConfiguration OAuth configuration
+     * @param configuration OAuth configuration
      */
-     SpotifyOAuthService(OAuthConfiguration oAuthConfiguration) {
-        this.oAuthConfiguration = Objects.requireNonNull(
-                oAuthConfiguration,
-                "OAuthConfiguration cannot be null."
-        );
+     SpotifyOAuthService(OAuthConfiguration configuration) {
+        this.configuration = Objects.requireNonNull(configuration, "OAuthConfiguration cannot be null.");
+        this.tokenService = new SpotifyTokenService(configuration);
     }
 
     /**
@@ -43,10 +43,10 @@ public class SpotifyOAuthService {
         String state = OAuthStateGenerator.generateState();
 
         String authorizationUrl = AuthorizationUrlBuilder.buildAuthorizationUrl(
-                oAuthConfiguration.getAuthorizationUrl(),
-                oAuthConfiguration.getClientId(),
-                oAuthConfiguration.getRedirectUri(),
-                oAuthConfiguration.getScope(),
+                configuration.getAuthorizationUrl(),
+                configuration.getClientId(),
+                configuration.getRedirectUri(),
+                configuration.getScope(),
                 OAuthResponseType.CODE,
                 state
         );
@@ -57,94 +57,12 @@ public class SpotifyOAuthService {
 
     public OAuthToken exchangeAuthorizationCode(String authorizationCode) {
 
-        Objects.requireNonNull(authorizationCode, "Authorization Code cannot be null.");
-
+        if (authorizationCode == null || authorizationCode.isBlank()) {
+            throw new OAuthException("Authorization code cannot be null or blank.");
+        }
         logger.info("Exchanging authorization code for OAuth access token.");
-
-        Response response = RestAssured
-                .given()
-                   .contentType(ContentType.URLENC)
-                   .formParam(OAuthConstants.GRANT_TYPE, OAuthGrantType.AUTHORIZATION_CODE.getValue())
-                   .formParam(OAuthConstants.CODE, authorizationCode)
-                   .formParam(OAuthConstants.REDIRECT_URI, oAuthConfiguration.getRedirectUri())
-                   .formParam(OAuthConstants.CLIENT_ID, oAuthConfiguration.getClientId())
-                   .formParam(OAuthConstants.CLIENT_SECRET, oAuthConfiguration.getClientSecret())
-                .post(oAuthConfiguration.getTokenUrl())
-                .then()
-                   .extract()
-                .response();
-
-        validateTokenResponse(response);
+        OAuthToken token = tokenService.exchangeAuthorizationCode(authorizationCode);
         logger.info("Authorization code exchanged successfully.");
-
-        return mapToken(response);
-    }
-
-    public OAuthToken refreshAccessToken(String refreshToken) {
-        Objects.requireNonNull(refreshToken, "Refresh token cannot be null.");
-
-        Response response = RestAssured
-                .given()
-                .contentType(ContentType.URLENC)
-                .auth()
-                .preemptive()
-                .basic(
-                        oAuthConfiguration.getClientId(),
-                        oAuthConfiguration.getClientSecret()
-                )
-                .formParam(
-                        OAuthConstants.GRANT_TYPE,
-                        OAuthGrantType.REFRESH_TOKEN.getValue()
-                )
-                .formParam(OAuthConstants.REFRESH_TOKEN, refreshToken)
-                .when()
-                .post(oAuthConfiguration.getTokenUrl())
-                .then()
-                .extract()
-                .response();
-
-        validateTokenResponse(response);
-
-        OAuthToken refreshedToken = mapToken(response);
-
-        // Spotify may not return a new refresh token.
-        if (!refreshedToken.hasRefreshToken()) {
-            refreshedToken.setRefreshToken(refreshToken);
-        }
-
-        return refreshedToken;
-    }
-
-    /**
-     * Validates Spotify OAuth token response.
-     *
-     * @param response RestAssured response
-     */
-    private void validateTokenResponse(Response response) {
-
-        Objects.requireNonNull(response, "Response cannot be null.");
-        logger.info("Validating token response.");
-        if (response.getStatusCode() != HttpStatus.SC_OK) {
-
-            logger.error("Spotify OAuth token exchange failed. HTTP Status {}.", response.getStatusCode());
-
-            throw new IllegalStateException(String.format("Spotify OAuth token exchange failed. HTTP Status %d.",
-                    response.getStatusCode()));
-        }
-    }
-
-    private OAuthToken mapToken(Response response) {
-
-        OAuthToken token = response.as(OAuthToken.class);
-
-        if (token == null) {
-            throw new IllegalArgumentException("Failed to deserialize Spotify OAuth response.");
-        }
-
-        token.setIssuedAt(Instant.now());
-
-        logger.info("OAuth Token received successfully.");
-
         return token;
     }
 }

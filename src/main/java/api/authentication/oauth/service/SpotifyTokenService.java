@@ -12,6 +12,7 @@ import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,8 +55,16 @@ public final class SpotifyTokenService {
         formParameters.put(
                 OAuthConstants.REFRESH_TOKEN,
                 refreshToken);
+        OAuthToken refreshedToken = exchangeToken(formParameters);
 
-        return exchangeToken(formParameters);
+        /*
+         * Spotify may not return a new refresh token.
+         */
+        if (!refreshedToken.hasRefreshToken()) {
+            refreshedToken.setRefreshToken(refreshToken);
+        }
+
+        return refreshedToken;
     }
 
     /**
@@ -71,6 +80,7 @@ public final class SpotifyTokenService {
 
         validateTokenResponse(response);
         OAuthToken token = response.as(OAuthToken.class);
+        token.setIssuedAt(Instant.now());
         logger.info("OAuth token successfully received.");
         return token;
     }

@@ -3,6 +3,7 @@ package api.authentication.oauth.manager;
 import api.authentication.oauth.model.OAuthToken;
 import api.authentication.oauth.storage.TokenStore;
 import api.authentication.oauth.storage.TokenStoreFactory;
+import exceptions.api.OAuthException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -111,17 +112,17 @@ public final class TokenManager {
      * Returns the current OAuth access token.
      *
      * @return OAuth access token
-     * @throws IllegalStateException if no valid access token is available
+     * @throws exceptions.api.OAuthException if no valid access token is available
      */
     public static String getAccessToken() {
         if (!hasToken()) {
-            throw new IllegalStateException("No OAuth token is currently available.");
+            throw new OAuthException("No OAuth token is currently available.");
         }
 
         String accessToken = cachedToken.getAccessToken();
 
         if (accessToken == null || accessToken.isBlank()) {
-            throw new IllegalStateException("OAuth access token is null or blank.");
+            throw new OAuthException("OAuth access token is null or blank.");
         }
 
         return accessToken;

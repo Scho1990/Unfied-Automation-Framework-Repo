@@ -1,5 +1,6 @@
 package api.authentication.oauth.service;
 
+import api.authentication.oauth.configuration.OAuthConfiguration;
 import api.config.ApiConfig;
 
 /**
@@ -15,6 +16,8 @@ import api.config.ApiConfig;
  */
 public final class OAuthServiceFactory {
 
+    private static final OAuthConfiguration CONFIGURATION = ApiConfig.getSpotifyOAuthConfiguration();
+
     private OAuthServiceFactory() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -24,8 +27,18 @@ public final class OAuthServiceFactory {
      *
      * @return configured SpotifyOAuthService
      */
-    public static SpotifyOAuthService spotify(){
+    public static SpotifyOAuthService createSpotifyOAuthService() {
 
-        return new SpotifyOAuthService(ApiConfig.getSpotifyOAuthConfiguration());
+        return new SpotifyOAuthService(CONFIGURATION);
+    }
+
+    /**
+     * Creates a configured Spotify Token Service.
+     *
+     * @return configured SpotifyOAuthService
+     */
+    public static SpotifyOAuthService createSpotifyTokenService() {
+
+        return new SpotifyOAuthService(CONFIGURATION);
     }
 }
