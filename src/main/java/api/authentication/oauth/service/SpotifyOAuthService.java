@@ -3,19 +3,11 @@ package api.authentication.oauth.service;
 import api.authentication.oauth.utility.AuthorizationUrlBuilder;
 import api.authentication.oauth.utility.OAuthStateGenerator;
 import api.authentication.oauth.configuration.OAuthConfiguration;
-import api.authentication.oauth.configuration.OAuthConstants;
-import api.authentication.oauth.configuration.OAuthGrantType;
 import api.authentication.oauth.configuration.OAuthResponseType;
 import api.authentication.oauth.model.OAuthToken;
 import exceptions.api.OAuthException;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.time.Instant;
 import java.util.Objects;
 
 public class SpotifyOAuthService {
@@ -65,4 +57,6 @@ public class SpotifyOAuthService {
         logger.info("Authorization code exchanged successfully.");
         return token;
     }
+
+
 }

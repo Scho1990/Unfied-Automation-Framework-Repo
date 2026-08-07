@@ -1,10 +1,6 @@
 package testscripts.spotify;
 
-import api.authentication.oauth.service.OAuthServiceFactory;
-import api.authentication.oauth.service.SpotifyOAuthService;
-import api.authentication.oauth.model.OAuthToken;
 import api.client.spotify.SpotifyPlaylistApiClient;
-import api.config.ApiConfig;
 import api.authentication.oauth.manager.TokenManager;
 import api.models.spotify.request.CreatePlaylistRequest;
 import io.restassured.response.Response;
@@ -20,35 +16,17 @@ public class PlaylistsApiTest {
 
  @BeforeSuite(alwaysRun = true)
  public void initializeSpotifyToken() {
-  SpotifyOAuthService service = OAuthServiceFactory.createSpotifyOAuthService();
 
-  OAuthToken token = service.refreshAccessToken(
-          ApiConfig.getSpotifyRefreshToken()
-  );
+   TokenManager.initialize();
 
-  TokenManager.storeToken(token);
  }
-    @Test(description = "Verify user can create Spotify playlist")
+    @Test(description = "Verify user can create Spotify playlist", invocationCount = 30, threadPoolSize =  5, timeOut = 60000)
     public void verifyCreatePlaylist() {
-       SpotifyOAuthService oAuthService = OAuthServiceFactory.createSpotifyOAuthService();
-
-        String authorizationUrl = oAuthService.getAuthorizationUrl();
-
-        String authorizationCode = ApiConfig.getAuthorizationCode();
-
-        logger.info("Authorization Code : {}",authorizationCode);
-        logger.info("authorizationUrl : {}",authorizationUrl);
-
-      //  WaitUtility.sleep(120);
-
-        OAuthToken token = oAuthService.exchangeAuthorizationCode(authorizationCode);
-
-        TokenManager.storeToken(token);
 
         SpotifyPlaylistApiClient playlistApiClient = new SpotifyPlaylistApiClient();
 
         CreatePlaylistRequest request = new CreatePlaylistRequest(
-                "UAF Automation Playlist"+ System.currentTimeMillis(),
+                "UAF Santosh Automation Playlist"+ System.currentTimeMillis(),
                 false,
                 false,
                 "Created by UAF Automation Framework");

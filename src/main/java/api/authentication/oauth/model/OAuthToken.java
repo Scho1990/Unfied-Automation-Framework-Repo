@@ -1,10 +1,12 @@
 package api.authentication.oauth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.Instant;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OAuthToken {
 
     @JsonProperty("access_token")
@@ -24,6 +26,7 @@ public class OAuthToken {
     private Instant issuedAt;
 
     private Instant expiryTime;
+
 
     public OAuthToken(){
     }
@@ -140,5 +143,23 @@ public class OAuthToken {
         } else {
             this.expiryTime = null;
         }
+    }
+
+    /**
+     * Checks whether an access token is available.
+     *
+     * @return true if the access token is not null or blank.
+     */
+    public boolean hasAccessToken() {
+        return accessToken != null && !accessToken.isBlank();
+    }
+
+    /**
+     * Checks whether the OAuth token has expired.
+     *
+     * @return true if the token has expired or expiry time is unavailable.
+     */
+    public boolean isExpired() {
+        return expiryTime == null || Instant.now().isAfter(expiryTime);
     }
 }

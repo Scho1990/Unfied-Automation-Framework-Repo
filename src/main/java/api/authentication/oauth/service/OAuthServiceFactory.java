@@ -37,8 +37,8 @@ public final class OAuthServiceFactory {
      *
      * @return configured SpotifyOAuthService
      */
-    public static SpotifyOAuthService createSpotifyTokenService() {
+    public static SpotifyTokenService createSpotifyTokenService() {
 
-        return new SpotifyOAuthService(CONFIGURATION);
+        return new SpotifyTokenService(CONFIGURATION);
     }
 }

@@ -1,6 +1,8 @@
 package api.authentication.oauth.manager;
 
 import api.authentication.oauth.model.OAuthToken;
+import api.authentication.oauth.service.OAuthServiceFactory;
+import api.authentication.oauth.service.SpotifyTokenService;
 import api.authentication.oauth.storage.TokenStore;
 import api.authentication.oauth.storage.TokenStoreFactory;
 import exceptions.api.OAuthException;
@@ -17,10 +19,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>
  * Responsibilities:
  * <ul>
- *     <li>Store the current OAuth token.</li>
- *     <li>Provide access to the current token.</li>
- *     <li>Clear the current token.</li>
- *     <li>Support future automatic token refresh.</li>
+ *     <li>Store OAuth token.</li>
+ *     <li>Load OAuth token.</li>
+ *     <li>Persist OAuth token.</li>
+ *     <li>Refresh expired access tokens.</li>
+ *     <li>Provide thread-safe access</li>
  * </ul>
  *
  * <p>
@@ -86,7 +89,15 @@ public final class TokenManager {
     }
 
     /**
-     * Clears the current OAuth token.
+     * Clears the cached OAuth token from memory and persistent storage.
+     *
+     * <p>This method is intended for scenarios such as:
+     * <ul>
+     *     <li>User logout</li>
+     *     <li>Refresh token revocation</li>
+     *     <li>Framework cleanup</li>
+     *     <li>Test environment reset</li>
+     * </ul>
      */
     public static void clear(){
         LOCK.lock();
@@ -100,32 +111,100 @@ public final class TokenManager {
     }
 
     /**
-     * Checks whether an OAuth token is available.
+     * Determines whether the in-memory OAuth token can be used
+     * for authenticated API requests without requiring a refresh.
      *
-     * @return true if a token exists
+     * @return true if a valid, non-expired access token is available.
      */
-    public static boolean hasToken() {
-        return cachedToken != null;
+    private static boolean hasValidToken() {
+        return cachedToken != null
+                && cachedToken.hasAccessToken()
+                && !cachedToken.isExpired();
     }
 
     /**
-     * Returns the current OAuth access token.
+     * Returns a valid OAuth access token.
      *
-     * @return OAuth access token
-     * @throws exceptions.api.OAuthException if no valid access token is available
+     * <p>
+     * Fast path:
+     * <ul>
+     *     <li>If a valid token is already available in memory,
+     *     return it immediately without synchronization.</li>
+     * </ul>
+     *
+     * <p>
+     * Slow path:
+     * <ul>
+     *     <li>Acquire the lock.</li>
+     *     <li>Double-check the token state.</li>
+     *     <li>Refresh the token if it has expired.</li>
+     * </ul>
+     *
+     * @return valid OAuth access token
+     * @throws OAuthException if no valid token is available
      */
     public static String getAccessToken() {
-        if (!hasToken()) {
-            throw new OAuthException("No OAuth token is currently available.");
+        /*
+         * Fast path.
+         * Avoid synchronization for the common case.
+         */
+        if (hasValidToken()) {
+            return cachedToken.getAccessToken();
+        }
+        LOCK.lock();
+        try {
+            logger.debug("Thread [{}] acquired OAuth refresh lock because no valid access token was available.",
+                    Thread.currentThread().getName());
+            /*
+             * Another thread may already have refreshed
+             * the token while this thread was waiting for the lock.
+             */
+            if(hasValidToken()){
+                logger.debug(
+                        "Thread [{}] detected that another thread already refreshed the OAuth token. Reusing the cached token.",
+                        Thread.currentThread().getName());
+                return cachedToken.getAccessToken();
+            }
+
+            /*
+             * No token available.
+             */
+            if (cachedToken == null) {
+                throw new OAuthException(
+                        "No OAuth token is available. Manual authorization is required.");
+            }
+            /*
+             * Refresh token missing.
+             */
+            if (!cachedToken.hasRefreshToken()){
+                throw new OAuthException("OAuth refresh token is unavailable. Manual authorization is required.");
+            }
+
+            logger.info("Thread [{}] is refreshing the expired OAuth access token.",
+                    Thread.currentThread().getName());
+
+            SpotifyTokenService tokenService = OAuthServiceFactory.createSpotifyTokenService();
+
+            OAuthToken refreshedToken = tokenService.refreshAccessToken(cachedToken.getRefreshToken());
+
+            /*
+             * Updates both memory cache and persistent storage.
+             */
+            storeToken(refreshedToken);
+
+            logger.info("Thread [{}] refreshed the OAuth access token successfully.",
+                    Thread.currentThread().getName());
+
+            return refreshedToken.getAccessToken();
+
+        } catch (OAuthException ex){
+            logger.error("Failed to refresh OAuth access token. ", ex);
+            throw ex;
         }
 
-        String accessToken = cachedToken.getAccessToken();
-
-        if (accessToken == null || accessToken.isBlank()) {
-            throw new OAuthException("OAuth access token is null or blank.");
+        finally {
+            LOCK.unlock();
         }
-
-        return accessToken;
     }
 
 }
