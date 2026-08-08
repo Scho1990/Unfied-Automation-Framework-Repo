@@ -9,13 +9,9 @@ public final class SpotifyEndPoints {
         throw new UnsupportedOperationException("Utility class.");
     }
 
-    /**
-     * Current user profile.
+    /*
+     * Playlist Endpoints
      */
-    public static final String CURRENT_USER = "/me";
-
-    /**
-     * Create playlist for current user.
-     */
-    public static final String PLAYLISTS = "/me/playlists";
+    public static final String CREATE_PLAYLIST = "/me/playlists";
+    public static final String GET_PLAYLIST = "/playlists/{playlist_id}";
 }

@@ -6,6 +6,8 @@ import io.restassured.specification.RequestSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
@@ -33,6 +35,14 @@ public abstract class BaseApiClient {
     protected Response authenticatedGet(String endpoint) {
 
         return authenticatedRequest()
+                .when()
+                .get(endpoint);
+    }
+
+    protected Response authenticatedGet(String endpoint, Map<String, ?> pathParams) {
+
+        return authenticatedRequest()
+                .pathParams(pathParams)
                 .when()
                 .get(endpoint);
     }
