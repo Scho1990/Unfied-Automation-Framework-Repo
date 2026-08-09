@@ -10,7 +10,7 @@
 
     <test name="Regression">
         <classes>
-         <!--   <class name="tests.ERailTest"/>
+            <class name="tests.ERailTest"/>
             <class name="tests.ERail2Test"/>
             <class name="tests.ERail3Test"/>
             <class name="tests.ERail4Test"/>
@@ -18,7 +18,6 @@
             <class name="tests.ERail6Test"/>
             <class name="tests.GoogleSearchResultTest"/>
             <class name="tests.ShadowRootResultTest"/>
-            <class name="tests.UserApiTest"/>-->
             <class name="tests.spotify.playlist.PlaylistApiTest"/>
         </classes>
     </test>
