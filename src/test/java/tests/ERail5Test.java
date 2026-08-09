@@ -1,4 +1,4 @@
-package testscripts;
+package tests;
 
 import base.BaseTest;
 import config.ConfigReader;
@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ERail3Test extends BaseTest {
+public class ERail5Test extends BaseTest {
 
-    private static final Logger logger = LogManager.getLogger(ERail3Test.class);
+    private static final Logger logger = LogManager.getLogger(ERail5Test.class);
 
     private static final String FROM_STATION = "DEL";
     private static final int STATION_INDEX = 3;
@@ -38,7 +38,7 @@ public class ERail3Test extends BaseTest {
         ExtentLogger.pass("Captured " + stationSuggestions.size() + " station suggestions.");
         String selectedStation = homePage.selectFromStationByIndex(STATION_INDEX);
         ExtentLogger.pass("Station suggestion selected: " + selectedStation);
-
+        
         validateStationSuggestions(stationSuggestions);
         LocalDate journeyDate = DateUtility.getFutureDate(FUTURE_DAYS);
         homePage.selectJourneyDate(journeyDate);

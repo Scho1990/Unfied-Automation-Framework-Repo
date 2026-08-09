@@ -9,9 +9,9 @@
 
     <test name="Smoke">
         <classes>
-            <class name="testscripts.ERailTest"/>
-            <class name="testscripts.OrangeHRMLoginTest"/>
-            <class name="testscripts.GoogleSearchResultTest"/>
+            <class name="tests.ERailTest"/>
+            <class name="tests.OrangeHRMLoginTest"/>
+            <class name="tests.GoogleSearchResultTest"/>
         </classes>
     </test>
 

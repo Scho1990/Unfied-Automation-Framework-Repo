@@ -1,4 +1,4 @@
-package testscripts;
+package tests;
 
 import base.BaseTest;
 import config.ConfigReader;
@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ERail6Test extends BaseTest {
+public class ERailTest extends BaseTest {
 
-    private static final Logger logger = LogManager.getLogger(ERail6Test.class);
+    private static final Logger logger = LogManager.getLogger(ERailTest.class);
 
     private static final String FROM_STATION = "DEL";
     private static final int STATION_INDEX = 3;

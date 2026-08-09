@@ -1,4 +1,4 @@
-package testscripts.spotify.authorize;
+package tests.spotify.authorize;
 
 import api.authentication.oauth.manager.TokenManager;
 import api.authentication.oauth.model.OAuthToken;

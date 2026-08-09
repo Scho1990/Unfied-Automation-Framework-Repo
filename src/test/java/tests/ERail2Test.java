@@ -1,4 +1,4 @@
-package testscripts;
+package tests;
 
 import base.BaseTest;
 import config.ConfigReader;

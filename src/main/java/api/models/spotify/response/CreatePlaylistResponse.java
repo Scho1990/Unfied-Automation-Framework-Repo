@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetPlaylistResponse {
+public class CreatePlaylistResponse {
 
     private String id;
 
@@ -22,6 +22,7 @@ public class GetPlaylistResponse {
     @JsonProperty("snapshot_id")
     private String snapshotId;
 
-    private String uri;
+    private String href;
 
+    private String uri;
 }

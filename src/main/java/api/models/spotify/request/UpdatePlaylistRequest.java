@@ -8,14 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Request body for Spotify Create Playlist API.
+ * Request body for Spotify Update Playlist API.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreatePlaylistRequest {
+public class UpdatePlaylistRequest {
 
     private String name;
 
@@ -25,5 +25,4 @@ public class CreatePlaylistRequest {
     private Boolean collaborative;
 
     private String description;
-
 }

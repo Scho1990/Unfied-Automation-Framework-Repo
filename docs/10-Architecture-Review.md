@@ -22,7 +22,7 @@ Overall Score: 9.81 / 10
 | reports | 10.0 |
 | listeners | 9.8 |
 | pages | 9.8 |
-| testscripts | 9.7 |
+| tests | 9.7 |
 
 ---
 

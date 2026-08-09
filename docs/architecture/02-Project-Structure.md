@@ -448,7 +448,7 @@ The following dependency rules help maintain a clean architecture.
 
 | Package | Can Depend On |
 |----------|---------------|
-| testscripts | pages, dataprovider, reports |
+| tests | pages, dataprovider, reports |
 | pages | base, driver, utilities |
 | driver | config, core, enums |
 | reports | core |

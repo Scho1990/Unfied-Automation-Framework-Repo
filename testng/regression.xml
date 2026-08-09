@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Automation Regression Suite" parallel="tests" thread-count="1">
+<suite name="Automation Regression Suite" parallel="methods" thread-count="4">
 
     <listeners>
         <listener class-name="listeners.TestListener"/>
@@ -10,16 +10,16 @@
 
     <test name="Regression">
         <classes>
-         <!--   <class name="testscripts.ERailTest"/>
-            <class name="testscripts.ERail2Test"/>
-            <class name="testscripts.ERail3Test"/>
-            <class name="testscripts.ERail4Test"/>
-            <class name="testscripts.ERail5Test"/>
-            <class name="testscripts.ERail6Test"/>
-            <class name="testscripts.GoogleSearchResultTest"/>
-            <class name="testscripts.ShadowRootResultTest"/>
-            <class name="testscripts.UserApiTest"/>-->
-            <class name="testscripts.spotify.PlaylistsApiTest"/>
+         <!--   <class name="tests.ERailTest"/>
+            <class name="tests.ERail2Test"/>
+            <class name="tests.ERail3Test"/>
+            <class name="tests.ERail4Test"/>
+            <class name="tests.ERail5Test"/>
+            <class name="tests.ERail6Test"/>
+            <class name="tests.GoogleSearchResultTest"/>
+            <class name="tests.ShadowRootResultTest"/>
+            <class name="tests.UserApiTest"/>-->
+            <class name="tests.spotify.playlist.PlaylistApiTest"/>
         </classes>
     </test>
 

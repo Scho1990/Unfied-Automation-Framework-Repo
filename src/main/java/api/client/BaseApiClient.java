@@ -39,10 +39,18 @@ public abstract class BaseApiClient {
                 .get(endpoint);
     }
 
-    protected Response authenticatedGet(String endpoint, Map<String, ?> pathParams) {
+    protected Response authenticatedGetWithPathParams(String endpoint, Map<String, ?> pathParams) {
 
         return authenticatedRequest()
                 .pathParams(pathParams)
+                .when()
+                .get(endpoint);
+    }
+
+    protected Response authenticatedGetWithQueryParams(String endpoint, Map<String, ?> queryParams) {
+
+        return authenticatedRequest()
+                .queryParams(queryParams)
                 .when()
                 .get(endpoint);
     }
@@ -75,6 +83,14 @@ public abstract class BaseApiClient {
                 .put(endpoint);
     }
 
+    protected Response authenticatedPut(String endpoint,Object requestBody,Map<String, ?> pathParams) {
+        return authenticatedRequest()
+                .pathParams(pathParams)
+                .body(requestBody)
+                .when()
+                .put(endpoint);
+    }
+
     protected Response patch(String endpoint,Object requestBody) {
         return request()
                 .body(requestBody)
@@ -102,6 +118,15 @@ public abstract class BaseApiClient {
                 .when()
                 .delete(endpoint);
     }
+
+    protected Response authenticatedDelete(String endpoint, Map<String, ?> queryParams) {
+
+        return authenticatedRequest()
+                .queryParams(queryParams)
+                .when()
+                .delete(endpoint);
+    }
+
 
 
 }

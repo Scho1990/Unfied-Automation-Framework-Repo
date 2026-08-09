@@ -83,7 +83,7 @@ QA-Selenium-Assignment
 │           ├── base
 │           ├── dataprovider
 │           ├── listeners
-│           └── testscripts
+│           └── tests
 │
 ├── pom.xml
 ├── testng.xml
