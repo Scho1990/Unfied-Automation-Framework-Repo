@@ -528,6 +528,44 @@ public class PlaylistApiTest extends BaseApiTest {
                 removeItemsResponse.getSnapshotId()
         );
 
+        // Act - Get playlist items again
+        Response getItemsResponse = playlistApiClient.getPlaylistItems(playlistId,queryParams);
+
+        Assert.assertEquals(
+                getItemsResponse.getStatusCode(),
+                HttpStatus.SC_OK,
+                "Get Playlist Items API should return HTTP 200."
+        );
+
+        GetPlaylistItemsResponse playlistItemsResponse =
+                getItemsResponse.as(GetPlaylistItemsResponse.class);
+
+        // Assert - One item should remain
+        Assert.assertEquals(
+                playlistItemsResponse.getTotal(),
+                1,
+                "Exactly one playlist item should remain."
+        );
+
+        Assert.assertEquals(
+                playlistItemsResponse.getItems().size(),
+                1,
+                "Expected exactly one playlist item in the response."
+        );
+
+        Assert.assertEquals(
+                playlistItemsResponse.getItems()
+                        .getFirst()
+                        .getItem()
+                        .getUri(),
+                uris.get(1),
+                "The wrong playlist item remains after removal."
+        );
+
+        logger.info(
+                "Playlist item removal and validation completed successfully."
+        );
+
 
     }
 
