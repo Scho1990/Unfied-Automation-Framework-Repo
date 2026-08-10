@@ -6,7 +6,6 @@ import api.models.spotify.response.*;
 import api.spotify.PlaylistTestDataFactory;
 import base.BaseApiTest;
 import io.restassured.response.Response;
-import org.apache.commons.math3.analysis.function.Add;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +34,7 @@ public class PlaylistApiTest extends BaseApiTest {
      playlistApiClient = new SpotifyPlaylistApiClient();
  }
 
-   // @Test(description = "Verify authenticated user can create a private Spotify playlist.")
+    @Test(description = "Verify authenticated user can create a private Spotify playlist.")
     public void verifyCreatePlaylist() {
 
         // Arrange - Create a playlist for this test
@@ -88,7 +87,7 @@ public class PlaylistApiTest extends BaseApiTest {
     }
 
 
-   // @Test(description = "Verify authenticated user can retrieve an existing Spotify playlist.")
+    @Test(description = "Verify authenticated user can retrieve an existing Spotify playlist.")
     public void verifyGetPlaylist() {
 
         // Arrange - Create a playlist for this test
@@ -137,7 +136,7 @@ public class PlaylistApiTest extends BaseApiTest {
 
     }
 
-   // @Test(description = "Verify authenticated user can update an existing Spotify playlist.")
+    @Test(description = "Verify authenticated user can update an existing Spotify playlist.")
     public void verifyUpdatePlaylist() {
         // Arrange - Create a playlist for this test
         CreatePlaylistRequest createRequest = PlaylistTestDataFactory.privatePlaylist();
@@ -192,7 +191,7 @@ public class PlaylistApiTest extends BaseApiTest {
         logger.info("Update Playlist validation completed successfully for Playlist ID: {}", playlistId);
     }
 
-   // @Test(description = "Verify authenticated user can remove a playlist from the library.")
+    @Test(description = "Verify authenticated user can remove a playlist from the library.")
     public void verifyDeletePlaylist() {
         // Arrange - Create playlist
         CreatePlaylistRequest createRequest = PlaylistTestDataFactory.publicPlaylist();
@@ -255,7 +254,7 @@ public class PlaylistApiTest extends BaseApiTest {
 
     }
 
-   // @Test(description = "Verify authenticated user can add items to a Spotify playlist.")
+    @Test(description = "Verify authenticated user can add items to a Spotify playlist.")
     public void verifyAddPlaylistItems() {
         // Arrange - Create playlist
         CreatePlaylistRequest createRequest = PlaylistTestDataFactory.privatePlaylist();
