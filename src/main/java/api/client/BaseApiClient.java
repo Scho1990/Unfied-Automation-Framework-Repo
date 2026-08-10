@@ -55,6 +55,15 @@ public abstract class BaseApiClient {
                 .get(endpoint);
     }
 
+    protected Response authenticatedGetWithQueryAndPathParams(String endpoint,Map<String, ?>pathParams, Map<String, ?> queryParams) {
+
+        return authenticatedRequest()
+                .pathParams(pathParams)
+                .queryParams(queryParams)
+                .when()
+                .get(endpoint);
+    }
+
     protected Response post(String endpoint,Object requestBody) {
         return request()
                 .body(requestBody)
@@ -62,8 +71,16 @@ public abstract class BaseApiClient {
                 .post(endpoint);
     }
 
-    protected Response authenticatedPost(String endpoint,Object requestBody) {
+    protected Response authenticatedPost(String endpoint, Object requestBody) {
         return  authenticatedRequest()
+                .body(requestBody)
+                .when()
+                .post(endpoint);
+    }
+
+    protected Response authenticatedPostWithPathParam(String endpoint, Object requestBody, Map<String, ?> pathParams) {
+        return  authenticatedRequest()
+                .pathParams(pathParams)
                 .body(requestBody)
                 .when()
                 .post(endpoint);
@@ -83,7 +100,7 @@ public abstract class BaseApiClient {
                 .put(endpoint);
     }
 
-    protected Response authenticatedPut(String endpoint,Object requestBody,Map<String, ?> pathParams) {
+    protected Response authenticatedPutWithPathParams(String endpoint,Object requestBody,Map<String, ?> pathParams) {
         return authenticatedRequest()
                 .pathParams(pathParams)
                 .body(requestBody)
@@ -123,6 +140,15 @@ public abstract class BaseApiClient {
 
         return authenticatedRequest()
                 .queryParams(queryParams)
+                .when()
+                .delete(endpoint);
+    }
+
+    protected Response authenticatedDeleteWithPathParams(String endpoint, Object requestBody, Map<String, ?> pathParams) {
+
+        return authenticatedRequest()
+                .pathParams(pathParams)
+                .body(requestBody)
                 .when()
                 .delete(endpoint);
     }

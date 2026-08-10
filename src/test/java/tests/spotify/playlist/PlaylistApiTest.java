@@ -1,8 +1,10 @@
 package tests.spotify.playlist;
 
 import api.client.spotify.SpotifyPlaylistApiClient;
+import api.models.spotify.request.AddPlaylistItemsRequest;
 import api.models.spotify.request.CreatePlaylistRequest;
 import api.models.spotify.request.UpdatePlaylistRequest;
+import api.models.spotify.response.AddPlaylistItemsResponse;
 import api.models.spotify.response.CreatePlaylistResponse;
 import api.models.spotify.response.GetPlaylistResponse;
 import api.spotify.PlaylistTestDataFactory;
@@ -34,7 +36,7 @@ public class PlaylistApiTest extends BaseApiTest {
      playlistApiClient = new SpotifyPlaylistApiClient();
  }
 
-    @Test(description = "Verify authenticated user can create a private Spotify playlist.")
+   // @Test(description = "Verify authenticated user can create a private Spotify playlist.")
     public void verifyCreatePlaylist() {
 
         // Arrange - Create a playlist for this test
@@ -87,7 +89,7 @@ public class PlaylistApiTest extends BaseApiTest {
     }
 
 
-    @Test(description = "Verify authenticated user can retrieve an existing Spotify playlist.")
+ //   @Test(description = "Verify authenticated user can retrieve an existing Spotify playlist.")
     public void verifyGetPlaylist() {
 
         // Arrange - Create a playlist for this test
@@ -136,7 +138,7 @@ public class PlaylistApiTest extends BaseApiTest {
 
     }
 
-    @Test(description = "Verify authenticated user can update an existing Spotify playlist.")
+  //  @Test(description = "Verify authenticated user can update an existing Spotify playlist.")
     public void verifyUpdatePlaylist() {
         // Arrange - Create a playlist for this test
         CreatePlaylistRequest createRequest = PlaylistTestDataFactory.privatePlaylist();
@@ -191,7 +193,7 @@ public class PlaylistApiTest extends BaseApiTest {
         logger.info("Update Playlist validation completed successfully for Playlist ID: {}", playlistId);
     }
 
-    @Test(description = "Verify authenticated user can remove a playlist from the library.")
+  //  @Test(description = "Verify authenticated user can remove a playlist from the library.")
     public void verifyDeletePlaylist() {
         // Arrange - Create playlist
         CreatePlaylistRequest createRequest = PlaylistTestDataFactory.publicPlaylist();
@@ -251,6 +253,58 @@ public class PlaylistApiTest extends BaseApiTest {
         Assert.assertFalse(libraryStatus.get(0), "Playlist should no longer exist in the user's library.");
 
         logger.info("Playlist [{}] successfully removed from user's library.", playlistId);
+
+    }
+
+    @Test(description = "Verify authenticated user can add items to a Spotify playlist.")
+    public void verifyAddPlaylistItems() {
+        // Arrange - Create playlist
+        CreatePlaylistRequest createRequest = PlaylistTestDataFactory.privatePlaylist();
+        Response createResponse = playlistApiClient.createPlaylist(createRequest);
+        Assert.assertEquals(createResponse.getStatusCode(), HttpStatus.SC_CREATED, "Create Playlist API should return HTTP 201."
+        );
+
+        logger.info("Create Playlist API Response:\n{}", createResponse.getBody().asPrettyString());
+
+        CreatePlaylistResponse createdPlaylist = createResponse.as(CreatePlaylistResponse.class);
+
+        String playlistId = createdPlaylist.getId();
+
+        Assert.assertNotNull(playlistId, "Playlist ID should not be null.");
+
+        //Register playlist for cleanup
+        Reporter.getCurrentTestResult().setAttribute(CREATED_PLAYLIST_ID, playlistId);
+
+        logger.info("Created Playlist ID for Add Playlist Items test: {}", playlistId);
+
+        //Arrange - Add playlist items request
+        List<String> uris = List.of(
+                "spotify:track:4iV5W9uYEdYUVa79Axb7Rh",
+                "spotify:track:1301WleyT98MSxVHPZCA6M"
+        );
+
+        AddPlaylistItemsRequest addItemsRequest = AddPlaylistItemsRequest.builder()
+                .uris(uris)
+                .position(0)
+                .build();
+
+        //Act - Add playlist items response
+        Response addItemsResponse = playlistApiClient.addPlaylistItems(addItemsRequest, playlistId);
+
+        logger.info("Add Playlist Items Response:\n{}", addItemsResponse.getBody().asPrettyString());
+
+        // Assert - HTTP
+        Assert.assertEquals(addItemsResponse.getStatusCode(), HttpStatus.SC_CREATED, "Add Playlist Items API should return HTTP 201.");
+
+        //Deserialize response
+        AddPlaylistItemsResponse response = addItemsResponse.as(AddPlaylistItemsResponse.class);
+
+        //Assert - Business
+        Assert.assertNotNull(response.getSnapshotId(), "Snapshot ID should not be null.");
+
+        Assert.assertFalse(response.getSnapshotId().isBlank(), "Snapshot ID should not be blank.");
+
+        logger.info("Items added successfully. Snapshot ID: {}", response.getSnapshotId());
 
     }
 

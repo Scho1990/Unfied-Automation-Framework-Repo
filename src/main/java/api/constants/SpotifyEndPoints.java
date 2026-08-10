@@ -17,4 +17,8 @@ public final class SpotifyEndPoints {
     public static final String UPDATE_PLAYLIST = "/playlists/{playlist_id}";
     public static final String REMOVE_FROM_LIBRARY = "/me/library";
     public static final String CHECK_LIBRARY_CONTAINS  = "/me/library/contains";
+    public static final String ADD_PLAYLIST_ITEMS = "/playlists/{playlist_id}/items";
+    public static final String GET_PLAYLIST_ITEMS = "/playlists/{playlist_id}/items";
+    public static final String REMOVE_PLAYLIST_ITEMS = "/playlists/{playlist_id}/items";
+
 }
