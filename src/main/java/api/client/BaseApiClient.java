@@ -144,7 +144,7 @@ public abstract class BaseApiClient {
                 .delete(endpoint);
     }
 
-    protected Response authenticatedDeleteWithPathParams(String endpoint, Object requestBody, Map<String, ?> pathParams) {
+    protected Response authenticatedDelete(String endpoint, Object requestBody, Map<String, ?> pathParams) {
 
         return authenticatedRequest()
                 .pathParams(pathParams)

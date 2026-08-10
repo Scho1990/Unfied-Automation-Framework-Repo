@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Request body for Spotify Remove Playlist Items API.
+ * Request body for Spotify Remove Playlist RemovePlaylistItem API.
  */
 @Data
 @Builder
@@ -19,7 +19,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RemovePlaylistItemsRequest {
 
-    private List<Items> items;
+    private List<RemovePlaylistItem> items;
 
     @JsonProperty("snapshot_id")
     private String snapshotId;
