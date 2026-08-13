@@ -3,16 +3,12 @@ package api.client;
 import api.specifications.RequestSpecFactory;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
-
-    private static final Logger logger = LogManager.getLogger(BaseApiClient.class);
 
     protected RequestSpecification request() {
 
@@ -55,7 +51,7 @@ public abstract class BaseApiClient {
                 .get(endpoint);
     }
 
-    protected Response authenticatedGetWithQueryAndPathParams(String endpoint,Map<String, ?>pathParams, Map<String, ?> queryParams) {
+    protected Response authenticatedGetWithPathAndQueryParams(String endpoint,Map<String, ?>pathParams, Map<String, ?> queryParams) {
 
         return authenticatedRequest()
                 .pathParams(pathParams)
@@ -78,7 +74,7 @@ public abstract class BaseApiClient {
                 .post(endpoint);
     }
 
-    protected Response authenticatedPostWithPathParam(String endpoint, Object requestBody, Map<String, ?> pathParams) {
+    protected Response authenticatedPostWithPathParams(String endpoint, Object requestBody, Map<String, ?> pathParams) {
         return  authenticatedRequest()
                 .pathParams(pathParams)
                 .body(requestBody)
@@ -144,7 +140,7 @@ public abstract class BaseApiClient {
                 .delete(endpoint);
     }
 
-    protected Response authenticatedDelete(String endpoint, Object requestBody, Map<String, ?> pathParams) {
+    protected Response authenticatedDeleteWithPathParamsAndBody(String endpoint, Object requestBody, Map<String, ?> pathParams) {
 
         return authenticatedRequest()
                 .pathParams(pathParams)

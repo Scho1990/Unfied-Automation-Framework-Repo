@@ -15,7 +15,7 @@ public class PlaylistItem {
     private PlaylistItemAddedBy addedBy;
 
     @JsonProperty("is_local")
-    private String isLocal;
+    private Boolean isLocal;
 
     @JsonProperty("primary_color")
     private String primaryColor;

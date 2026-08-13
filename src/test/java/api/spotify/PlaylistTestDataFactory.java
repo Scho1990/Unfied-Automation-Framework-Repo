@@ -14,7 +14,7 @@ public final class PlaylistTestDataFactory {
                 .name("Automation Playlist" + System.currentTimeMillis())
                 .isPublic(false)
                 .collaborative(false)
-                .description("Created for Get Playlist API validation.")
+                .description("Created by API automation test.")
                 .build();
     }
 
@@ -23,7 +23,7 @@ public final class PlaylistTestDataFactory {
                 .name("Automation Playlist" + System.currentTimeMillis())
                 .isPublic(true)
                 .collaborative(false)
-                .description("Created for Get Playlist API validation.")
+                .description("Created by API automation test.")
                 .build();
     }
 

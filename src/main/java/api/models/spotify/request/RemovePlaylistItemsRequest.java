@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Request body for Spotify Remove Playlist RemovePlaylistItem API.
+ * Request body for Spotify Remove Playlist Items API.
  */
 @Data
 @Builder

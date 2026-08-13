@@ -2,13 +2,10 @@ package api.client.spotify;
 
 import api.client.BaseApiClient;
 import api.constants.SpotifyEndPoints;
-import api.models.spotify.request.AddPlaylistItemsRequest;
-import api.models.spotify.request.CreatePlaylistRequest;
-import api.models.spotify.request.RemovePlaylistItemsRequest;
-import api.models.spotify.request.UpdatePlaylistRequest;
+import api.models.spotify.request.*;
 import exceptions.FrameworkException;
 import io.restassured.response.Response;
-
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SpotifyPlaylistApiClient extends BaseApiClient
@@ -31,19 +28,13 @@ public class SpotifyPlaylistApiClient extends BaseApiClient
 
     public Response getPlaylist(String playlistId)
     {
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
-
+        validatePlaylistId(playlistId);
         return authenticatedGetWithPathParams(SpotifyEndPoints.GET_PLAYLIST, Map.of("playlist_id", playlistId));
     }
 
     public Response updatePlaylist(UpdatePlaylistRequest request ,String playlistId){
 
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
-
+        validatePlaylistId(playlistId);
         if (request == null) {
             throw new FrameworkException(
                     "Update Playlist request cannot be null.");
@@ -53,68 +44,88 @@ public class SpotifyPlaylistApiClient extends BaseApiClient
 
     public Response removePlaylistFromLibrary(String playlistId){
 
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
-
+        validatePlaylistId(playlistId);
         String playlistUri = "spotify:playlist:" + playlistId;
-
         return authenticatedDelete(SpotifyEndPoints.REMOVE_FROM_LIBRARY, Map.of("uris", playlistUri));
-
     }
 
     public Response isPlaylistInCurrentUserLibrary(String playlistId){
 
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
-
+        validatePlaylistId(playlistId);
         String playlistUri = "spotify:playlist:" + playlistId;
-
         return authenticatedGetWithQueryParams(SpotifyEndPoints.CHECK_LIBRARY_CONTAINS, Map.of("uris", playlistUri));
-
     }
 
     public Response addPlaylistItems(AddPlaylistItemsRequest request,String playlistId){
 
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
+        validatePlaylistId(playlistId);
         if (request == null) {
             throw new FrameworkException(
-                    "Add Playlist RemovePlaylistItem request cannot be null.");
+                    "Add Playlist Items request cannot be null.");
         }
-
-        return authenticatedPostWithPathParam(SpotifyEndPoints.ADD_PLAYLIST_ITEMS, request, Map.of("playlist_id",playlistId));
+        return authenticatedPostWithPathParams(SpotifyEndPoints.ADD_PLAYLIST_ITEMS, request, Map.of("playlist_id",playlistId));
     }
 
-    public Response getPlaylistItems(String playlistId,Map<String,Object> queryParams){
+    public Response getPlaylistItems(String playlistId, GetPlaylistItemsQueryParams queryParams){
 
-        if(playlistId == null || playlistId.isBlank()){
-            throw new FrameworkException("Playlist ID cannot be null or empty.");
-        }
-
+        validatePlaylistId(playlistId);
         /*Map<String,Object> queryParams = new HashMap<>();
         queryParams.put("market",market);
         queryParams.put("fields",fields);
         queryParams.put("limit",limit);
         queryParams.put("offset",offset);
         queryParams.put("additional_types",additionalTypes);*/
-
-        return authenticatedGetWithQueryAndPathParams(SpotifyEndPoints.GET_PLAYLIST_ITEMS, Map.of("playlist_id",playlistId),queryParams);
+        Map<String,Object> queryParameters = buildGetPlaylistItemsQueryParams(queryParams);
+        return authenticatedGetWithPathAndQueryParams(SpotifyEndPoints.GET_PLAYLIST_ITEMS, Map.of("playlist_id",playlistId),queryParameters);
     }
 
     public Response removePlaylistItems(RemovePlaylistItemsRequest request , String playlistId){
 
+        validatePlaylistId(playlistId);
+        if (request == null) {
+            throw new FrameworkException(
+                    "Remove Playlist Items request cannot be null.");
+        }
+        return authenticatedDeleteWithPathParamsAndBody(SpotifyEndPoints.REMOVE_PLAYLIST_ITEMS, request, Map.of("playlist_id",playlistId));
+    }
+
+    private Map<String, Object> buildGetPlaylistItemsQueryParams(GetPlaylistItemsQueryParams params) {
+
+        if (params == null) {
+            return Map.of();
+        }
+
+        Map<String, Object> queryParams = new LinkedHashMap<>();
+
+        if (params.getMarket() != null && !params.getMarket().isBlank()) {
+            queryParams.put("market", params.getMarket());
+        }
+
+        if (params.getFields() != null && !params.getFields().isBlank()) {
+            queryParams.put("fields", params.getFields());
+        }
+
+        if (params.getLimit() != null) {
+            queryParams.put("limit", params.getLimit());
+        }
+
+        if (params.getOffset() != null) {
+            queryParams.put("offset", params.getOffset());
+        }
+
+        if (params.getAdditionalTypes() != null
+                && !params.getAdditionalTypes().isBlank()) {
+            queryParams.put("additional_types", params.getAdditionalTypes());
+        }
+
+        return queryParams;
+    }
+
+
+    private void validatePlaylistId(String playlistId){
         if(playlistId == null || playlistId.isBlank()){
             throw new FrameworkException("Playlist ID cannot be null or empty.");
         }
-
-        if (request == null) {
-            throw new FrameworkException(
-                    "Remove Playlist RemovePlaylistItem request cannot be null.");
-        }
-        return authenticatedDelete(SpotifyEndPoints.REMOVE_PLAYLIST_ITEMS, request, Map.of("playlist_id",playlistId));
     }
 
 }

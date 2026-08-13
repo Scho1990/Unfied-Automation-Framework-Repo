@@ -6,17 +6,12 @@ import api.authentication.oauth.utility.BasicAuthorizationHeaderBuilder;
 import api.config.ApiConfig;
 import api.constants.ApiConstants;
 import api.authentication.oauth.manager.TokenManager;
-import config.ConfigReader;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 public final class RequestSpecFactory {
-
-    private static final Logger logger = LogManager.getLogger(RequestSpecFactory.class);
 
     private RequestSpecFactory() {
         throw new UnsupportedOperationException("Utility class");
