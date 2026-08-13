@@ -6,6 +6,7 @@ import api.authentication.oauth.utility.BasicAuthorizationHeaderBuilder;
 import api.config.ApiConfig;
 import api.constants.ApiConstants;
 import api.authentication.oauth.manager.TokenManager;
+import api.reporting.ExtentApiReportFilter;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
@@ -21,6 +22,7 @@ public final class RequestSpecFactory {
 
         return getBaseBuilder(ApiConfig.getBaseUrl())
                 .addHeader(ApiConstants.API_KEY,ApiConfig.getApiKey())
+                .addFilter(new ExtentApiReportFilter())
                 .build();
     }
 
@@ -28,6 +30,7 @@ public final class RequestSpecFactory {
     public static RequestSpecification getRequestSpecification(String baseUrl) {
         return getBaseBuilder(baseUrl)
                 .addHeader(ApiConstants.API_KEY,ApiConfig.getApiKey())
+                .addFilter(new ExtentApiReportFilter())
                 .build();
     }
 
@@ -37,6 +40,7 @@ public final class RequestSpecFactory {
                         OAuthConstants.AUTHORIZATION,
                         OAuthConstants.BEARER_PREFIX +
                                    TokenManager.getAccessToken())
+                .addFilter(new ExtentApiReportFilter())
                 .build();
     }
 

@@ -9,9 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import reports.ExtentLogger;
-import reports.ExtentManager;
-import reports.ExtentTestManager;
+import reports.*;
 import retry.*;
 import utilities.ScreenshotUtility;
 import java.time.Instant;
@@ -28,9 +26,18 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult result){
         String testName = getDisplayName(result);
-        logger.info("STARTED : {}", testName);
+        TestType testType = TestTypeResolver.resolve(result);
+
+        logger.info("STARTED : {} | Test Type : {} | Thread ID : {}",
+                testName,
+                testType,
+                Thread.currentThread().threadId());
+
         ExtentTestManager.setTest(ExtentManager.getExtentReports().createTest(testName));
+        ExtentLogger.assignCategory(testType.name());
         ExtentLogger.info("Test started");
+        ExtentLogger.info("Test Type : "+ testType);
+        ExtentLogger.info("Thread ID : " + Thread.currentThread().threadId());
     }
     @Override
     public void onTestSuccess(ITestResult result){
@@ -50,14 +57,17 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result){
         String testName = getTestName(result);
+        TestType testType = TestTypeResolver.resolve(result);
+
         logger.debug("RetryScheduled Attribute : {}",
                 result.getAttribute(RetryConstants.RETRY_SCHEDULED));
         logger.debug("Retry Count : {}",
                 RetryStatistics.getRetryCount(testName));
-
         logger.debug("Was Retried : {}",
                 wasRetried(testName));
+
         Boolean retryScheduled = (Boolean) result.getAttribute(RetryConstants.RETRY_SCHEDULED);
+
         if (Boolean.FALSE.equals(retryScheduled)) {
             if (wasRetried(testName)) {
                 RetryStatistics.incrementFailedAfterRetry();
@@ -70,28 +80,28 @@ public class TestListener implements ITestListener {
         }
         logger.error("FAILED : {}", testName);
         logger.error(result.getThrowable().getMessage(), result.getThrowable());
-        String screenshotPath=null;
-        try {
-            screenshotPath = ScreenshotUtility.captureScreenshot(testName);
-        }
-        catch (Exception e){
-            logger.warn("Screenshot capture failed",e);
-        }
+
         ExtentLogger.fail(result.getThrowable());
-        try {
-            ExtentLogger.fail("Screenshot", MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+
+        if(testType == TestType.UI){
+            attachScreenshot(testName);
         }
-        catch (Exception e) {
-            logger.warn("Unable to attach screenshot.");
-            ExtentLogger.log(Status.WARNING,"Unable to attach screenshot");
+        else if(testType == TestType.API){
+            ExtentLogger.info("API test failure detected. UI screenshot is not applicable.");
         }
+        else {
+            ExtentLogger.warning("Unable to determine test type. Screenshot was not attempted.");
+        }
+
         ExtentLogger.log(Status.INFO, "Test Failed");
     }
+
     @Override
     public void onTestSkipped(ITestResult result){
         logger.warn("SKIPPED : {}", getTestName(result));
         ExtentLogger.skip(result.getThrowable());
     }
+
     @Override
     public void onFinish(ITestContext context){
         int passed = context.getPassedTests().size();
@@ -129,6 +139,28 @@ public class TestListener implements ITestListener {
     private boolean wasRetried(String testName){
         return RetryStatistics.getRetryCount(testName) > 0;
     }
+
+    private void attachScreenshot(String testName) {
+        try {
+            String screenshotPath = ScreenshotUtility.captureScreenshot(testName);
+
+            if (screenshotPath == null || screenshotPath.isBlank()) {
+                ExtentLogger.warning("Screenshot was not available.");
+                return;
+            }
+
+            ExtentLogger.fail(
+                    "Screenshot",
+                    MediaEntityBuilder
+                            .createScreenCaptureFromPath(screenshotPath)
+                            .build()
+            );
+        } catch (Exception e) {
+            logger.warn("Unable to attach screenshot.", e);
+            ExtentLogger.warning("Unable to attach screenshot.");
+        }
+    }
+
 
 
 }

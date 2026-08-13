@@ -1,6 +1,8 @@
 package reports;
 
+import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.model.Media;
 
 public final class ExtentLogger {
@@ -54,5 +56,25 @@ public final class ExtentLogger {
     public static void assignCategory(String category) {
         ExtentTestManager.getTest().assignCategory(category);
     }
+
+    /**
+     * Adds a formatted code block to the current Extent test.
+     * Useful for API request/response payloads where preserving formatting
+     * is more readable than writing the content as a single log line.
+     */
+    public static void codeBlock(String title, String content) {
+       ExtentTest node = ExtentTestManager.getTest()
+                .createNode(title);
+
+        node.log(
+                Status.INFO,
+                MarkupHelper.createCodeBlock(
+                        content == null ? "" : content
+                )
+        );
+
+        node.getModel().setStatus(Status.INFO);
+    }
+
 
 }

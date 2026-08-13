@@ -81,7 +81,7 @@ public class PlaylistApiTest extends BaseApiTest {
         logger.info("Get Playlist API Response:\n{}", getResponse.getBody().asPrettyString());
 
         Assert.assertEquals(
-                getResponse.getStatusCode(), HttpStatus.SC_OK, "Get Playlist API should return HTTP 200.");
+                getResponse.getStatusCode(), HttpStatus.SC_CREATED, "Get Playlist API should return HTTP 200.");
 
         // Deserialize response
         GetPlaylistResponse playlistResponse = getResponse.getBody().as(GetPlaylistResponse.class);
